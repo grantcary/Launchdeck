@@ -1,0 +1,12 @@
+{'11': "webbrowser.get(chrome_path).open('youtube.com')", 
+'12': "webbrowser.get(chrome_path).open('hollowandgrace.com')", 
+'13': "subprocess.Popen(['C:/users/Grant/AppData/Local/Programs/Microsoft VS Code//Code.exe'])", 
+'14': "webbrowser.get(chrome_path).open('https://www.twitch.tv/xqcow')", 
+'15': "keyboard.press_and_release('ctrl + s')", 
+'16': "keyboard.press_and_release('left')", 
+'17': "keyboard.press_and_release('space')", 
+'18': "keyboard.press_and_release('right')", 
+'21': "keyboard.press_and_release('cmd')", 
+'26': "keyboard.press_and_release('shift + <')", 
+'27': "keyboard.press_and_release('f')", 
+'28': "keyboard.press_and_release('shift + >')"}
