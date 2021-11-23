@@ -7,7 +7,7 @@ import keyboard
 import ast
 
 
-hotkeys = ast.literal_eval(open("C:/Users/Grant/Documents/GitHub/Launchpad-Stream-Deck//HotKeys.txt").read())
+hotkeys = ast.literal_eval(open("HotKeys.txt").read())
 
 chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
@@ -21,20 +21,28 @@ for i in range(pygame.midi.get_count()):
     print(pygame.midi.get_device_info(i), i)
 print("--------------------------")
 
-while True:
-    while(pygame.midi.Input.poll(midi_in) == False):
-        time.sleep(0.1)
-    midi_data = pygame.midi.Input.read(midi_in, 1)
-    midi_note, timestamp = midi_data[0]
-    note_status, keynum, velocity, unused = midi_note
-    print("Midi Note: \n\tNote Status: ", note_status, " Key Number: ", keynum," Velocity: " , velocity, "\n\tTime Stamp: ", timestamp)
-    if note_status == 144:
-        key_down = True
-    elif note_status == 128: 
-        key_down = False
-    else:
-        print("Unknown status!")
 
-    if str(keynum) in hotkeys and velocity == 127:
-        eval(hotkeys[str(keynum)])
+def runMidi():
+    x = True
+    while x:
+        while(pygame.midi.Input.poll(midi_in) == False):
+            time.sleep(0.1)
+        midi_data = pygame.midi.Input.read(midi_in, 1)
+        midi_note, timestamp = midi_data[0]
+        note_status, keynum, velocity, unused = midi_note
+        print("Midi Note: \n\tNote Status: ", note_status, " Key Number: ", keynum," Velocity: " , velocity, "\n\tTime Stamp: ", timestamp)
+        if note_status == 144:
+            key_down = True
+        elif note_status == 128: 
+            key_down = False
+        else:
+            print("Unknown status!")
 
+        if str(keynum) in hotkeys and velocity == 127:
+            eval(hotkeys[str(keynum)])
+
+        if str(keynum) == "19":
+            x = False
+    pygame.midi.Input.close(midi_in)
+
+    # runMidi()
