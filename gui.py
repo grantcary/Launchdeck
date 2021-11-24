@@ -2,7 +2,8 @@ from PyQt5.QtCore import QObject, QThread, pyqtSignal
 import PyQt5.QtWidgets as qtw
 import PyQt5.QtGui as qtg
 import Midi_Input as mi
-import subprocess
+import replacR as rr
+# import subprocess
 import sys
 
 class Worker(QObject):
@@ -53,7 +54,7 @@ class MainWindow(qtw.QWidget):
         container = qtw.QWidget()
         container.setLayout(qtw.QGridLayout())
         
-        btn_11 = qtw.QPushButton('11')
+        btn_11 = qtw.QPushButton('11', clicked = lambda: self.test("11"))
         btn_12 = qtw.QPushButton('12')
         btn_13 = qtw.QPushButton('13')
         btn_14 = qtw.QPushButton('14')
@@ -217,6 +218,9 @@ class MainWindow(qtw.QWidget):
         
         self.layout().addWidget(container)
 
+    def test(self, text):
+        print(text)
+
     def onActivated(self, text):
         container1 = qtw.QWidget()
         container1.setLayout(qtw.QGridLayout())
@@ -226,9 +230,13 @@ class MainWindow(qtw.QWidget):
         elif text == "open chrome tab":
             cmdInput = qtw.QLineEdit(self)
             container1.layout().addWidget(cmdInput, 0, 4, 1, 3)
+            submit = qtw.QPushButton('submit', self)
+            container1.layout().addWidget(submit, 0, 7)
         elif text == "keyboard shortcut":
             cmdInput = qtw.QLineEdit(self)
             container1.layout().addWidget(cmdInput, 0, 4, 1, 3)
+            submit = qtw.QPushButton('submit', self)
+            container1.layout().addWidget(submit, 0, 7)
         else:
             print("nothing")
         self.layout().addWidget(container1)
