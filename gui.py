@@ -5,10 +5,6 @@ import Midi_Input as mi
 import subprocess
 import sys
 
-#execute Midi_Input.py as script in shell
-# def executeMidiInput():
-#     subprocess.call(['python', 'Midi_Input.py'])
-
 class Worker(QObject):
     finished = pyqtSignal()
 
@@ -23,19 +19,40 @@ class MainWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Launchdeck')
+        self.setFixedWidth(400)
+        self.setFixedHeight(400)
         self.setStyleSheet("background-color: #1f1f1f;")
         # self.setStyleSheet("QPushButton {color: #bababa;}")
         self.setLayout(qtw.QVBoxLayout())
+        self.topgrid()
         self.buttongrid()
 
         self.show()
-    def buttongrid(self):
-        container = qtw.QWidget()
-        container.setLayout(qtw.QGridLayout())
+
+    def topgrid(self):
+        container2 = qtw.QWidget()
+        container2.setLayout(qtw.QGridLayout())
         
         titleLP = qtw.QLabel('Launchdeck')
         comboBox = qtw.QComboBox(self)
         btn_start = qtw.QPushButton('Start', clicked = self.execute)
+
+        container2.layout().addWidget(titleLP, 0, 0)
+        container2.layout().addWidget(btn_start, 0, 4)
+
+        comboBox.addItem("select function")
+        comboBox.addItem("open file")
+        comboBox.addItem("open chrome tab")
+        comboBox.addItem("keyboard shortcut")
+        container2.layout().addWidget(comboBox, 0, 1)
+        comboBox.activated[str].connect(self.onActivated)
+        
+        self.layout().addWidget(container2)
+        
+    def buttongrid(self):
+        container = qtw.QWidget()
+        container.setLayout(qtw.QGridLayout())
+        
         btn_11 = qtw.QPushButton('11')
         btn_12 = qtw.QPushButton('12')
         btn_13 = qtw.QPushButton('13')
@@ -117,7 +134,6 @@ class MainWindow(qtw.QWidget):
         btn_110 = qtw.QPushButton('110')
         btn_111 = qtw.QPushButton('111')
 
-        container.layout().addWidget(titleLP, 0, 0)
         container.layout().addWidget(btn_104, 1, 0)
         container.layout().addWidget(btn_105, 1, 1)
         container.layout().addWidget(btn_106, 1, 2)
@@ -126,7 +142,6 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_109, 1, 5)
         container.layout().addWidget(btn_110, 1, 6)
         container.layout().addWidget(btn_111, 1, 7)
-        container.layout().addWidget(btn_start, 0, 8)
         container.layout().addWidget(btn_81, 2, 0)
         container.layout().addWidget(btn_82, 2, 1)
         container.layout().addWidget(btn_83, 2, 2)
@@ -200,20 +215,23 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_18, 9, 7)
         container.layout().addWidget(btn_19, 9, 8)
         
-        #combo box start
-        comboBox.addItem("select function")
-        comboBox.addItem("open file")
-        comboBox.addItem("open chrome tab")
-        comboBox.addItem("keyboard shortcut")
-        container.layout().addWidget(comboBox, 0, 2, 1, 2)
-
-        comboBox.activated[str].connect(self.style_choice)
         self.layout().addWidget(container)
 
-    def style_choice(self, text):
-        self.styleChoice.setText(text)
-        qtw.QApplication.setStyle(qtw.QStyleFactory.create(text))
-        #combo box end
+    def onActivated(self, text):
+        container1 = qtw.QWidget()
+        container1.setLayout(qtw.QGridLayout())
+        if text == "open file":
+            openFile = qtw.QPushButton('open file', self)
+            container1.layout().addWidget(openFile, 0, 4)
+        elif text == "open chrome tab":
+            cmdInput = qtw.QLineEdit(self)
+            container1.layout().addWidget(cmdInput, 0, 4, 1, 3)
+        elif text == "keyboard shortcut":
+            cmdInput = qtw.QLineEdit(self)
+            container1.layout().addWidget(cmdInput, 0, 4, 1, 3)
+        else:
+            print("nothing")
+        self.layout().addWidget(container1)
 
     def execute(self):
         self.thread = QThread()
