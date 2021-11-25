@@ -219,7 +219,9 @@ class MainWindow(qtw.QWidget):
         self.layout().addWidget(container)
 
     def buttonselect(self, text):
-        print(text)
+        global keynumT
+        keynumT = text
+        print(keynumT)
 
     def onActivated(self, text):
         container1 = qtw.QWidget()
@@ -235,7 +237,7 @@ class MainWindow(qtw.QWidget):
         elif text == "keyboard shortcut":
             cmdInput = qtw.QLineEdit(self)
             container1.layout().addWidget(cmdInput, 0, 4, 1, 3)
-            submit = qtw.QPushButton('submit', self)
+            submit = qtw.QPushButton('submit', clicked = lambda: rr.clicked(keynumT))
             container1.layout().addWidget(submit, 0, 7)
         else:
             print("nothing")
@@ -253,7 +255,8 @@ class MainWindow(qtw.QWidget):
 
         self.thread.start()
 
-app = qtw.QApplication(sys.argv)
-mw = MainWindow()
-app.setStyle(qtw.QStyleFactory.create('Fusion'))
-app.exec_()
+if __name__ == '__main__':
+    app = qtw.QApplication(sys.argv)
+    mw = MainWindow()
+    app.setStyle(qtw.QStyleFactory.create('Fusion'))
+    app.exec_()

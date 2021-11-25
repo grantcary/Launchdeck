@@ -12,3 +12,6 @@ def shortkeys(key_num, kbsc):
 def openexe(key_num, exepath):
     address = r"C:\Users\Grant\Documents\GitHub\Launchdeck".replace("\\", "/")
     hotkeys[key_num] = f"subprocess.Popen(['{str(address)}'])"
+
+def clicked(text):
+    print(text)
