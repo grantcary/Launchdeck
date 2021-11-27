@@ -6,8 +6,10 @@ import subprocess
 import keyboard
 import ast
 
-
-hotkeys = ast.literal_eval(open("HotKeys.txt").read())
+try:
+    hotkeys = ast.literal_eval(open("HotKeys.txt").read())
+except:
+    print("Not a valid file")
 
 chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
@@ -23,6 +25,7 @@ print("--------------------------")
 
 
 def runMidi():
+    global x
     x = True
     while x:
         while(pygame.midi.Input.poll(midi_in) == False):
@@ -39,7 +42,10 @@ def runMidi():
             print("Unknown status!")
 
         if str(keynum) in hotkeys and velocity == 127:
-            eval(hotkeys[str(keynum)])
+            try:
+                eval(hotkeys[str(keynum)])
+            except:
+                print("Invalid cmd")
 
         if str(keynum) == "19":
             x = False

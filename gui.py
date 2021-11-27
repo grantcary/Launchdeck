@@ -3,16 +3,12 @@ import PyQt5.QtWidgets as qtw
 import PyQt5.QtGui as qtg
 import Midi_Input as mi
 import replacR as rr
-# import subprocess
 import sys
 
 class Worker(QObject):
     finished = pyqtSignal()
 
     def run(self):
-        # Here we pass the update_progress (uncalled!)
-        # function to the long_running_function:
-        # executeMidiInput()
         mi.runMidi()
         self.finished.emit()
 
@@ -35,19 +31,15 @@ class MainWindow(qtw.QWidget):
         container2.setLayout(qtw.QGridLayout())
         
         titleLP = qtw.QLabel('Launchdeck')
-        comboBox = qtw.QComboBox(self)
+        btn_func = qtw.QPushButton('Change func', clicked = self.onActivated)
         btn_start = qtw.QPushButton('Start', clicked = self.execute)
+        btn_stop = qtw.QPushButton('Stop', clicked = self.stop)
 
         container2.layout().addWidget(titleLP, 0, 0)
-        container2.layout().addWidget(btn_start, 0, 4)
+        container2.layout().addWidget(btn_func, 0, 1)       
+        container2.layout().addWidget(btn_start, 0, 2)
+        container2.layout().addWidget(btn_stop, 0, 3)
 
-        comboBox.addItem("select function")
-        comboBox.addItem("open file")
-        comboBox.addItem("open chrome tab")
-        comboBox.addItem("keyboard shortcut")
-        container2.layout().addWidget(comboBox, 0, 1)
-        comboBox.activated[str].connect(self.onActivated)
-        
         self.layout().addWidget(container2)
         
     def buttongrid(self):
@@ -134,15 +126,18 @@ class MainWindow(qtw.QWidget):
         btn_109 = qtw.QPushButton(clicked = lambda: self.buttonselect('109'))
         btn_110 = qtw.QPushButton(clicked = lambda: self.buttonselect('110'))
         btn_111 = qtw.QPushButton(clicked = lambda: self.buttonselect('111'))
+        lab_1 = qtw.QLabel("")
+        lab_2 = qtw.QLabel("")
 
-        container.layout().addWidget(btn_104, 1, 0)
-        container.layout().addWidget(btn_105, 1, 1)
-        container.layout().addWidget(btn_106, 1, 2)
-        container.layout().addWidget(btn_107, 1, 3)
-        container.layout().addWidget(btn_108, 1, 4)
-        container.layout().addWidget(btn_109, 1, 5)
-        container.layout().addWidget(btn_110, 1, 6)
-        container.layout().addWidget(btn_111, 1, 7)
+        container.layout().addWidget(btn_104, 0, 0)
+        container.layout().addWidget(btn_105, 0, 1)
+        container.layout().addWidget(btn_106, 0, 2)
+        container.layout().addWidget(btn_107, 0, 3)
+        container.layout().addWidget(btn_108, 0, 4)
+        container.layout().addWidget(btn_109, 0, 5)
+        container.layout().addWidget(btn_110, 0, 6)
+        container.layout().addWidget(btn_111, 0, 7)
+        container.layout().addWidget(lab_1, 1, 0)
         container.layout().addWidget(btn_81, 2, 0)
         container.layout().addWidget(btn_82, 2, 1)
         container.layout().addWidget(btn_83, 2, 2)
@@ -151,7 +146,8 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_86, 2, 5)
         container.layout().addWidget(btn_87, 2, 6)
         container.layout().addWidget(btn_88, 2, 7)
-        container.layout().addWidget(btn_89, 2, 8)
+        container.layout().addWidget(lab_2, 2, 8)
+        container.layout().addWidget(btn_89, 2, 9)
         container.layout().addWidget(btn_71, 3, 0)
         container.layout().addWidget(btn_72, 3, 1)
         container.layout().addWidget(btn_73, 3, 2)
@@ -160,7 +156,8 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_76, 3, 5)
         container.layout().addWidget(btn_77, 3, 6)
         container.layout().addWidget(btn_78, 3, 7)
-        container.layout().addWidget(btn_79, 3, 8)
+        container.layout().addWidget(lab_2, 3, 8)
+        container.layout().addWidget(btn_79, 3, 9)
         container.layout().addWidget(btn_61, 4, 0)
         container.layout().addWidget(btn_62, 4, 1)
         container.layout().addWidget(btn_63, 4, 2)
@@ -169,7 +166,8 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_66, 4, 5)
         container.layout().addWidget(btn_67, 4, 6)
         container.layout().addWidget(btn_68, 4, 7)
-        container.layout().addWidget(btn_69, 4, 8)
+        container.layout().addWidget(lab_2, 4, 8)
+        container.layout().addWidget(btn_69, 4, 9)
         container.layout().addWidget(btn_51, 5, 0)
         container.layout().addWidget(btn_52, 5, 1)
         container.layout().addWidget(btn_53, 5, 2)
@@ -178,7 +176,8 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_56, 5, 5)
         container.layout().addWidget(btn_57, 5, 6)
         container.layout().addWidget(btn_58, 5, 7)
-        container.layout().addWidget(btn_59, 5, 8)
+        container.layout().addWidget(lab_2, 5, 8)
+        container.layout().addWidget(btn_59, 5, 9)
         container.layout().addWidget(btn_41, 6, 0)
         container.layout().addWidget(btn_42, 6, 1)
         container.layout().addWidget(btn_43, 6, 2)
@@ -187,7 +186,8 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_46, 6, 5)
         container.layout().addWidget(btn_47, 6, 6)
         container.layout().addWidget(btn_48, 6, 7)
-        container.layout().addWidget(btn_49, 6, 8)
+        container.layout().addWidget(lab_2, 6, 8)
+        container.layout().addWidget(btn_49, 6, 9)
         container.layout().addWidget(btn_31, 7, 0)
         container.layout().addWidget(btn_32, 7, 1)
         container.layout().addWidget(btn_33, 7, 2)
@@ -196,7 +196,8 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_36, 7, 5)
         container.layout().addWidget(btn_37, 7, 6)
         container.layout().addWidget(btn_38, 7, 7)
-        container.layout().addWidget(btn_39, 7, 8)
+        container.layout().addWidget(lab_2, 7, 8)
+        container.layout().addWidget(btn_39, 7, 9)
         container.layout().addWidget(btn_21, 8, 0)
         container.layout().addWidget(btn_22, 8, 1)
         container.layout().addWidget(btn_23, 8, 2)
@@ -205,7 +206,8 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_26, 8, 5)
         container.layout().addWidget(btn_27, 8, 6)
         container.layout().addWidget(btn_28, 8, 7)
-        container.layout().addWidget(btn_29, 8, 8)
+        container.layout().addWidget(lab_2, 8, 8)
+        container.layout().addWidget(btn_29, 8, 9)
         container.layout().addWidget(btn_11, 9, 0)
         container.layout().addWidget(btn_12, 9, 1)
         container.layout().addWidget(btn_13, 9, 2)
@@ -214,34 +216,35 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(btn_16, 9, 5)
         container.layout().addWidget(btn_17, 9, 6)
         container.layout().addWidget(btn_18, 9, 7)
-        container.layout().addWidget(btn_19, 9, 8)
-        
+        container.layout().addWidget(lab_2, 9, 8)
+        container.layout().addWidget(btn_19, 9, 9)
+
         self.layout().addWidget(container)
 
-    def buttonselect(self, text):
-        global keynumT
-        keynumT = text
-        print(keynumT)
+    def stop(self):
+        mi.x = False
 
-    def onActivated(self, text):
-        container1 = qtw.QWidget()
-        container1.setLayout(qtw.QGridLayout())
-        if text == "open file":
-            openFile = qtw.QPushButton('open file', self)
-            container1.layout().addWidget(openFile, 0, 4)
-        elif text == "open chrome tab":
-            cmdInput = qtw.QLineEdit(self)
-            container1.layout().addWidget(cmdInput, 0, 4, 1, 3)
-            submit = qtw.QPushButton('submit', self)
-            container1.layout().addWidget(submit, 0, 7)
-        elif text == "keyboard shortcut":
-            cmdInput = qtw.QLineEdit(self)
-            container1.layout().addWidget(cmdInput, 0, 4, 1, 3)
-            submit = qtw.QPushButton('submit', clicked = lambda: rr.clicked(keynumT))
-            container1.layout().addWidget(submit, 0, 7)
-        else:
-            print("nothing")
-        self.layout().addWidget(container1)
+    def buttonselect(self, text):
+        global bNum
+        bNum = text
+        print(bNum)
+
+    def onActivated(self):
+        msg = qtw.QMessageBox()
+        selectlist = ["Open File", "Open Tab", "Keyboard Shortcut"]
+        try:
+            taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {bNum}", selectlist)
+            if taskselect == "Open File":
+                print("working on it")
+            elif taskselect == "Open Tab":
+                urlInput = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
+                rr.opentab(bNum, urlInput[0])
+            elif taskselect == "Keyboard Shortcut":
+                cmdInput = qtw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter key command:")
+                rr.shortkeys(bNum, cmdInput[0])
+        except:
+            msg.setText("Select a button you want to change first")
+            retval = msg.exec_()
 
     def execute(self):
         self.thread = QThread()
@@ -259,4 +262,6 @@ if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
     mw = MainWindow()
     app.setStyle(qtw.QStyleFactory.create('Fusion'))
+    app.setStyleSheet("QPushButton, QLabel {color: #a8a8a8;}")
+    # app.setStyleSheet("border-radius : 50; border : 2px solid black")
     app.exec_()
