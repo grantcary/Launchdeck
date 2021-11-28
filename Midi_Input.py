@@ -6,29 +6,31 @@ import subprocess
 import keyboard
 import ast
 
-try:
-    hotkeys = ast.literal_eval(open("HotKeys.txt").read())
-except:
-    print("Not a valid file")
-
 chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
-pygame.midi.init()
-midi_in = pygame.midi.Input(1)
-
-print("Diagnostics -------------")
-print(f"MIDI Device Connected: {pygame.midi.get_init()}")
-print(f"Number of MIDI Devices Connected: {pygame.midi.get_count()}")
-for i in range(pygame.midi.get_count()):
-    print(pygame.midi.get_device_info(i), i)
-print("--------------------------")
-
+# print("Diagnostics -------------")
+# print(f"MIDI Device Connected: {pygame.midi.get_init()}")
+# print(f"Number of MIDI Devices Connected: {pygame.midi.get_count()}")
+# for i in range(pygame.midi.get_count()):
+#     print(pygame.midi.get_device_info(i), i)
+# print("--------------------------")
 
 def runMidi():
+    pygame.midi.init()
+    midi_in = pygame.midi.Input(1)
+    try:
+        hotkeys = ast.literal_eval(open("HotKeys.txt").read())
+    except:
+        print("Not a valid file")
     global x
     x = True
     while x:
         while(pygame.midi.Input.poll(midi_in) == False):
+            if x == False:
+                pygame.midi.Input.close(midi_in)
+                pygame.midi.quit()
+                print("Terminated")
+                quit()
             time.sleep(0.1)
         midi_data = pygame.midi.Input.read(midi_in, 1)
         midi_note, timestamp = midi_data[0]
@@ -47,8 +49,11 @@ def runMidi():
             except:
                 print("Invalid cmd")
 
-        if str(keynum) == "19":
-            x = False
-    pygame.midi.Input.close(midi_in)
+        # if str(keynum) == "19":
+        #     x = False
 
-    # runMidi()
+    pygame.midi.Input.close(midi_in)
+    pygame.midi.quit()
+    print("Terminated")
+
+# runMidi()

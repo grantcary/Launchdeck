@@ -1,24 +1,20 @@
-from PyQt5.QtCore import QObject, QThread, pyqtSignal
 import PyQt5.QtWidgets as qtw
-import PyQt5.QtGui as qtg
+import threading
 import Midi_Input as mi
 import replacR as rr
 import sys
-
-class Worker(QObject):
-    finished = pyqtSignal()
-
-    def run(self):
-        mi.runMidi()
-        self.finished.emit()
+import os
 
 class MainWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Launchdeck')
+        self.setWindowOpacity(0.99)
         self.setFixedWidth(400)
         self.setFixedHeight(400)
         self.setStyleSheet("background-color: #1f1f1f;")
+        # self.setStyleSheet("background-color: rgba(31, 31, 31, 50);")
+        # self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         # self.setStyleSheet("QPushButton {color: #bababa;}")
         self.setLayout(qtw.QVBoxLayout())
         self.topgrid()
@@ -29,6 +25,7 @@ class MainWindow(qtw.QWidget):
     def topgrid(self):
         container2 = qtw.QWidget()
         container2.setLayout(qtw.QGridLayout())
+        container2.setStyleSheet("padding: 8px;")
         
         titleLP = qtw.QLabel('Launchdeck')
         btn_func = qtw.QPushButton('Change func', clicked = self.onActivated)
@@ -45,6 +42,8 @@ class MainWindow(qtw.QWidget):
     def buttongrid(self):
         container = qtw.QWidget()
         container.setLayout(qtw.QGridLayout())
+        # container.setStyleSheet("background-color: #171717; border-radius: 5px;")
+        container.setStyleSheet("background-color: #171717; padding: 10px;")
         
         btn_11 = qtw.QPushButton(clicked = lambda: self.buttonselect("11"))
         btn_12 = qtw.QPushButton(clicked = lambda: self.buttonselect('12'))
@@ -235,33 +234,38 @@ class MainWindow(qtw.QWidget):
         try:
             taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {bNum}", selectlist)
             if taskselect == "Open File":
-                print("working on it")
+                self.getFileDir()
+                print("Finished")
             elif taskselect == "Open Tab":
                 urlInput = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
                 rr.opentab(bNum, urlInput[0])
+                print("Finished")
             elif taskselect == "Keyboard Shortcut":
                 cmdInput = qtw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter key command:")
                 rr.shortkeys(bNum, cmdInput[0])
+                print("Finished")
         except:
             msg.setText("Select a button you want to change first")
             retval = msg.exec_()
 
+    def getFileDir(self):
+        file_filter = "Executable (*.exe)"
+        response = qtw.QFileDialog.getOpenFileName(
+            parent=self,
+            caption="Select Executable",
+            directory=os.getcwd(),
+            filter=file_filter
+        )
+        rr.openexe(bNum, response[0])
+
     def execute(self):
-        self.thread = QThread()
-        self.worker = Worker()
-        self.worker.moveToThread(self.thread)
-
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-
-        self.thread.start()
+        newthread = threading.Thread(target=mi.runMidi)
+        newthread.start()
 
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
     mw = MainWindow()
     app.setStyle(qtw.QStyleFactory.create('Fusion'))
-    app.setStyleSheet("QPushButton, QLabel {color: #a8a8a8;}")
+    app.setStyleSheet("QPushButton, QLabel {color: #c7c7c7;}")
     # app.setStyleSheet("border-radius : 50; border : 2px solid black")
     app.exec_()
