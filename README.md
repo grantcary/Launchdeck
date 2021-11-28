@@ -2,7 +2,7 @@
 
 Simple application that turns your novation launchpad mk2 into a customizable controller
 
-##Features:
+#Features:
 
 - open exe file
 - open chrome tab
