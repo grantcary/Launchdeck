@@ -22,19 +22,19 @@ class MainWindow(qtw.QWidget):
 
         self.show()
 
-    def topgrid(self):
+    def topgrid(self, parent=None):
         container2 = qtw.QWidget()
         container2.setLayout(qtw.QGridLayout())
         container2.setStyleSheet("padding: 8px;")
         
         titleLP = qtw.QLabel('Launchdeck')
         btn_func = qtw.QPushButton('Change func', clicked = self.onActivated)
-        btn_start = qtw.QPushButton('Start', clicked = self.execute)
+        self.btn_start = qtw.QPushButton('Start', clicked = self.execute)
         btn_stop = qtw.QPushButton('Stop', clicked = self.stop)
 
         container2.layout().addWidget(titleLP, 0, 0)
         container2.layout().addWidget(btn_func, 0, 1)       
-        container2.layout().addWidget(btn_start, 0, 2)
+        container2.layout().addWidget(self.btn_start, 0, 2)
         container2.layout().addWidget(btn_stop, 0, 3)
 
         self.layout().addWidget(container2)
@@ -222,6 +222,9 @@ class MainWindow(qtw.QWidget):
 
     def stop(self):
         mi.x = False
+        self.btn_start.setEnabled(True)
+        self.btn_start.setStyleSheet("background-color: #1f1f1f")
+        self.btn_start.setText("Start")
 
     def buttonselect(self, text):
         global bNum
@@ -259,8 +262,11 @@ class MainWindow(qtw.QWidget):
         rr.openexe(bNum, response[0])
 
     def execute(self):
+        self.btn_start.setEnabled(False)
+        self.btn_start.setStyleSheet("background-color: #3c85cf")
+        self.btn_start.setText("Running")
         newthread = threading.Thread(target=mi.runMidi)
-        newthread.start()
+        newthread.start()    
 
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
