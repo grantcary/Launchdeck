@@ -25,14 +25,14 @@ class MainWindow(qtw.QWidget):
     def topgrid(self, parent=None):
         container2 = qtw.QWidget()
         container2.setLayout(qtw.QGridLayout())
-        container2.setStyleSheet("padding: 8px;")
+        container2.setStyleSheet("padding: 8px; QInputDialog {background-color: #bababa;}")
         
-        titleLP = qtw.QLabel('Launchdeck')
+        settings = qtw.QPushButton('Settings', clicked = self.settings)
         btn_func = qtw.QPushButton('Change func', clicked = self.onActivated)
         self.btn_start = qtw.QPushButton('Start', clicked = self.execute)
         btn_stop = qtw.QPushButton('Stop', clicked = self.stop)
 
-        container2.layout().addWidget(titleLP, 0, 0)
+        container2.layout().addWidget(settings, 0, 0)
         container2.layout().addWidget(btn_func, 0, 1)       
         container2.layout().addWidget(self.btn_start, 0, 2)
         container2.layout().addWidget(btn_stop, 0, 3)
@@ -45,7 +45,6 @@ class MainWindow(qtw.QWidget):
         # container.setStyleSheet("background-color: #171717; border-radius: 5px;")
         container.setStyleSheet("background-color: #171717; padding: 10px;")
         
-        global prevbtn
         self.prevbtn = None
         self.btn_11 = qtw.QPushButton(clicked = lambda: self.buttonselect("11", self.btn_11, self.prevbtn))
         self.btn_12 = qtw.QPushButton(clicked = lambda: self.buttonselect('12', self.btn_12, self.prevbtn))
@@ -229,56 +228,68 @@ class MainWindow(qtw.QWidget):
         self.btn_start.setText("Start")
 
     def buttonselect(self, text, button, prevbtn):
-        global bNum
-        bNum = text
-        print(bNum)
         if prevbtn != None and prevbtn != button: 
             prevbtn.setStyleSheet("background-color: #171717")
             button.setStyleSheet("background-color: #3c85cf")
             self.prevbtn = button
-            # bNum = text
-            # print(bNum)
-        # elif prevbtn == button:
-        #     button.setStyleSheet("background-color: #171717")
-            # bNum = None
-            # print(bNum)
+            self.bNum = text
+            print(self.bNum)
+        elif prevbtn == button and self.bNum == text:
+            button.setStyleSheet("background-color: #171717")
+            self.prevbtn = button
+            self.bNum = None
+            print(self.bNum)
         else:
             button.setStyleSheet("background-color: #3c85cf")
             self.prevbtn = button
-            # bNum = text
-            # print(bNum)
+            self.bNum = text
+            print(self.bNum)
 
     def onActivated(self):
         msg = qtw.QMessageBox()
+        msg.setStyleSheet("background-color: #1f1f1f; color: #bababa")
         selectlist = ["Select Function", "Open File", "Open Tab", "Keyboard Shortcut"]
         try:
-            taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {bNum}", selectlist)
-            if taskselect == "Select Function":
-                pass
-            elif taskselect == "Open File":
-                self.getFileDir()
-                print("Finished")
-            elif taskselect == "Open Tab":
-                urlInput = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
-                rr.opentab(bNum, urlInput[0])
-                print("Finished")
-            elif taskselect == "Keyboard Shortcut":
-                cmdInput = qtw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter key command:")
-                rr.shortkeys(bNum, cmdInput[0])
-                print("Finished")
+            if isinstance(int(self.bNum), int) == True:
+                taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {self.bNum}", selectlist)
+                if taskselect == "Select Function":
+                    pass
+                elif taskselect == "Open File":
+                    self.getFileDir("1")
+                    print("Finished")
+                elif taskselect == "Open Tab":
+                    urlInput = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
+                    rr.opentab(self.bNum, urlInput[0])
+                    print("Finished")
+                elif taskselect == "Keyboard Shortcut":
+                    cmdInput = qtw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter keyboard shortcut:")
+                    rr.shortkeys(self.bNum, cmdInput[0])
+                    print("Finished")
         except:
-            msg.setText("Select a button you want to change first")
+            msg.setText("Select a button you want to change function of first")
             retval = msg.exec_()
 
-    def getFileDir(self):
+    def settings(self):
+        selectlist = ["Select setting", "Chrome path"]
+        taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select setting", "Select setting", selectlist)
+        if taskselect == "Chrome path":
+            self.getFileDir("2")
+            print("Finished")   
+
+    def getFileDir(self, func):
         file_filter = "Executable (*.exe)"
         response = qtw.QFileDialog.getOpenFileName(
             parent=self,
-            caption="Select Executable",
+            caption="Select File",
             directory=os.getcwd(),
             filter=file_filter
         )
-        rr.openexe(bNum, response[0])
+        if func == "1":
+            rr.openexe(self.bNum, response[0])
+            print(func)
+        elif func == "2":
+            rr.chromepath(response[0])
+            print(func)
 
     def execute(self):
         self.btn_start.setEnabled(False)
@@ -291,6 +302,6 @@ if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
     mw = MainWindow()
     app.setStyle(qtw.QStyleFactory.create('Fusion'))
-    app.setStyleSheet("QPushButton, QLabel {color: #c7c7c7;}")
+    app.setStyleSheet("QPushButton, QLabel, QLineEdit, QComboBox, QAbstractItemView, QMessageBox {color: #c7c7c7;}")
     # app.setStyleSheet("border-radius : 50; border : 2px solid black")
     app.exec_()

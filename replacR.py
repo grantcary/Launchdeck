@@ -10,6 +10,14 @@ def opentxt():
     except:
         print("Not a valid file")
 
+def opensettings():
+    try:
+        global settings
+        settings = ast.literal_eval(open("settings.txt").read())
+        return settings
+    except:
+        print("Not a valid file")
+
 def openexe(key_num, exepath):
     opentxt()
     address = exepath.replace("\\", "/")
@@ -40,3 +48,15 @@ def shortkeys(key_num, kbsc):
     with open("HotKeys.txt", "w") as writedict:
         writedict.write(json.dumps(hotkeys))
     print(f"Changed key {key_num} to {kbsc}")
+
+def chromepath(chrome):
+    opensettings()
+    address = chrome.replace("\\", "/")
+    address = f"{str(address)} %s"
+    settings['1'] = str(address)
+    file = open("settings.txt","r+")
+    file.truncate(0)
+    file.close()
+    with open("settings.txt", "w") as writedict:
+        writedict.write(json.dumps(settings))
+    print(f"Changed key chrome path to {address}")

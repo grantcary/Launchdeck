@@ -6,8 +6,6 @@ import subprocess
 import keyboard
 import ast
 
-chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-
 # print("Diagnostics -------------")
 # print(f"MIDI Device Connected: {pygame.midi.get_init()}")
 # print(f"Number of MIDI Devices Connected: {pygame.midi.get_count()}")
@@ -16,44 +14,52 @@ chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 # print("--------------------------")
 
 def runMidi():
-    pygame.midi.init()
-    midi_in = pygame.midi.Input(1)
     try:
-        hotkeys = ast.literal_eval(open("HotKeys.txt").read())
-    except:
-        print("Not a valid file")
-    global x
-    x = True
-    while x:
-        while(pygame.midi.Input.poll(midi_in) == False):
-            if x == False:
-                pygame.midi.Input.close(midi_in)
-                pygame.midi.quit()
-                print("Terminated")
-                quit()
-            time.sleep(0.1)
-        midi_data = pygame.midi.Input.read(midi_in, 1)
-        midi_note, timestamp = midi_data[0]
-        note_status, keynum, velocity, unused = midi_note
-        print("Midi Note: \n\tNote Status: ", note_status, " Key Number: ", keynum," Velocity: " , velocity, "\n\tTime Stamp: ", timestamp)
-        if note_status == 144:
-            key_down = True
-        elif note_status == 128: 
-            key_down = False
-        else:
-            print("Unknown status!")
+        pygame.midi.init()
+        midi_in = pygame.midi.Input(1)
+        try:
+            settings = ast.literal_eval(open("settings.txt").read())
+            chrome_path = settings['1'] 
+            
+            hotkeys = ast.literal_eval(open("HotKeys.txt").read())
+            global x
+            x = True
+            while x:
+                while(pygame.midi.Input.poll(midi_in) == False):
+                    if x == False:
+                        pygame.midi.Input.close(midi_in)
+                        pygame.midi.quit()
+                        print("Terminated")
+                        quit()
+                    time.sleep(0.1)
+                midi_data = pygame.midi.Input.read(midi_in, 1)
+                midi_note, timestamp = midi_data[0]
+                note_status, keynum, velocity, unused = midi_note
+                print("Midi Note: \n\tNote Status: ", note_status, " Key Number: ", keynum," Velocity: " , velocity, "\n\tTime Stamp: ", timestamp)
+                if note_status == 144:
+                    key_down = True
+                elif note_status == 128: 
+                    key_down = False
+                else:
+                    print("Unknown status!")
 
-        if str(keynum) in hotkeys and velocity == 127:
-            try:
-                eval(hotkeys[str(keynum)])
-            except:
-                print("Invalid cmd")
+                if str(keynum) in hotkeys and velocity == 127:
+                    try:
+                        eval(hotkeys[str(keynum)])
+                    except:
+                        print("Invalid cmd")
+
+            pygame.midi.Input.close(midi_in)
+            pygame.midi.quit()
+            print("Terminated")
+        except:
+            print("Not a valid file")
+    except:
+        print("Midi not connected")
 
         # if str(keynum) == "19":
         #     x = False
 
-    pygame.midi.Input.close(midi_in)
-    pygame.midi.quit()
-    print("Terminated")
+
 
 # runMidi()
