@@ -251,20 +251,22 @@ class MainWindow(qtw.QWidget):
         selectlist = ["Select Function", "Open File", "Open Tab", "Keyboard Shortcut"]
         try:
             if isinstance(int(self.bNum), int) == True:
-                taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {self.bNum}", selectlist)
+                taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {self.bNum}", selectlist, 0, False)
                 if taskselect == "Select Function":
                     pass
                 elif taskselect == "Open File":
                     self.getFileDir("1")
                     print("Finished")
                 elif taskselect == "Open Tab":
-                    urlInput = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
-                    rr.opentab(self.bNum, urlInput[0])
-                    print("Finished")
+                    urlInput, ok = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
+                    if urlInput and ok:
+                        rr.opentab(self.bNum, urlInput)
+                        print("Finished")
                 elif taskselect == "Keyboard Shortcut":
-                    cmdInput = qtw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter keyboard shortcut:")
-                    rr.shortkeys(self.bNum, cmdInput[0])
-                    print("Finished")
+                    cmdInput, ok = qtw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter keyboard shortcut:")
+                    if cmdInput and ok:
+                        rr.shortkeys(self.bNum, cmdInput)
+                        print("Finished")
         except:
             msg.setText("Select a button you want to change function of first")
             retval = msg.exec_()
@@ -278,17 +280,17 @@ class MainWindow(qtw.QWidget):
 
     def getFileDir(self, func):
         file_filter = "Executable (*.exe)"
-        response = qtw.QFileDialog.getOpenFileName(
+        response, ok = qtw.QFileDialog.getOpenFileName(
             parent=self,
             caption="Select File",
             directory=os.getcwd(),
             filter=file_filter
         )
         if func == "1":
-            rr.openexe(self.bNum, response[0])
+            rr.openexe(self.bNum, response)
             print(func)
         elif func == "2":
-            rr.chromepath(response[0])
+            rr.chromepath(response)
             print(func)
 
     def execute(self):
