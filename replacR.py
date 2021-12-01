@@ -1,6 +1,7 @@
 import ast
 import os
 import json
+from urllib.parse import urlparse
 
 def opentxt():
     try:
@@ -21,7 +22,19 @@ def opensettings():
 def openexe(key_num, exepath):
     opentxt()
     address = exepath.replace("\\", "/")
-    hotkeys[key_num] = f"subprocess.Popen(['{str(address)}'])"
+
+    x = 0
+    y = ""
+    for i in address[::-1]:
+        if i == ".":
+            x += 1
+        elif i == "/":
+            break
+        elif x != 0:
+            y += i
+
+    appendList = [f"subprocess.Popen(['{str(address)}'])", "Open program: " + y[::-1].capitalize()]
+    hotkeys[key_num] = appendList
     file = open("HotKeys.txt","r+")
     file.truncate(0)
     file.close()
@@ -31,7 +44,10 @@ def openexe(key_num, exepath):
 
 def opentab(key_num, url):
     opentxt()
-    hotkeys[key_num] = f"webbrowser.get(chrome_path).open('{str(url)}')"
+    tempurl = urlparse(url).netloc
+    print(tempurl)
+    appendList = [f"webbrowser.get(chrome_path).open('{str(url)}')", "Open tab: " + tempurl]
+    hotkeys[key_num] = appendList
     file = open("HotKeys.txt","r+")
     file.truncate(0)
     file.close()
@@ -41,7 +57,8 @@ def opentab(key_num, url):
 
 def shortkeys(key_num, kbsc):
     opentxt()
-    hotkeys[key_num] = f"keyboard.press_and_release('{str(kbsc)}')"
+    appendList = [f"keyboard.press_and_release('{str(kbsc)}')", "Keyboard shortcut: " + str(kbsc)]
+    hotkeys[key_num] = appendList
     file = open("HotKeys.txt","r+")
     file.truncate(0)
     file.close()

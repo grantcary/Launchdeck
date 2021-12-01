@@ -45,7 +45,7 @@ def runMidi():
 
                 if str(keynum) in hotkeys and velocity == 127:
                     try:
-                        eval(hotkeys[str(keynum)])
+                        eval(hotkeys[str(keynum)][0])
                     except:
                         print("Invalid cmd")
 
