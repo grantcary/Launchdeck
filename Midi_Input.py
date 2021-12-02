@@ -6,17 +6,18 @@ import subprocess
 import keyboard
 import ast
 
-# print("Diagnostics -------------")
-# print(f"MIDI Device Connected: {pygame.midi.get_init()}")
-# print(f"Number of MIDI Devices Connected: {pygame.midi.get_count()}")
-# for i in range(pygame.midi.get_count()):
-#     print(pygame.midi.get_device_info(i), i)
-# print("--------------------------")
-
 def runMidi():
     try:
         pygame.midi.init()
         midi_in = pygame.midi.Input(1)
+        
+        print("Diagnostics -------------")
+        print(f"MIDI Device Connected: {pygame.midi.get_init()}")
+        print(f"Number of MIDI Devices Connected: {pygame.midi.get_count()}")
+        for i in range(pygame.midi.get_count()):
+            print(pygame.midi.get_device_info(i), i)
+        print("--------------------------")
+
         try:
             settings = ast.literal_eval(open("settings.txt").read())
             chrome_path = settings['1'] 

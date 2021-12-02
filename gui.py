@@ -2,6 +2,7 @@ import PyQt5.QtWidgets as qtw
 import threading
 import Midi_Input as mi
 import replacR as rr
+import ast
 import sys
 import os
 
@@ -17,6 +18,7 @@ class MainWindow(qtw.QWidget):
         self.setLayout(qtw.QVBoxLayout())
         self.topgrid()
         self.buttongrid()
+        self.hkparse()
 
         self.show()
 
@@ -27,12 +29,16 @@ class MainWindow(qtw.QWidget):
         container2.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
 
         settings = qtw.QPushButton('Settings', clicked = self.settings)
+        settings.setToolTip("Change Settings")
         settings.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
         btn_func = qtw.QPushButton('Change func', clicked = self.onActivated)
+        btn_func.setToolTip("Change function of button")
         btn_func.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
         self.btn_start = qtw.QPushButton('Start', clicked = self.execute)
+        self.btn_start.setToolTip("Start Launchpad")
         self.btn_start.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
         btn_stop = qtw.QPushButton('Stop', clicked = self.stop)
+        btn_stop.setToolTip("Stop Launchpad")
         btn_stop.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
 
         container2.layout().addWidget(settings, 0, 0)
@@ -224,29 +230,110 @@ class MainWindow(qtw.QWidget):
 
         self.layout().addWidget(container, stretch=4)
 
+    def hkparse(self):
+        hkparse = ast.literal_eval(open("HotKeys.txt").read())
+        self.btn_11.setToolTip(hkparse["11"][1])
+        self.btn_12.setToolTip(hkparse["12"][1])
+        self.btn_13.setToolTip(hkparse["13"][1])
+        self.btn_14.setToolTip(hkparse["14"][1])
+        self.btn_15.setToolTip(hkparse["15"][1])
+        self.btn_16.setToolTip(hkparse["16"][1])
+        self.btn_17.setToolTip(hkparse["17"][1])
+        self.btn_18.setToolTip(hkparse["18"][1])
+        self.btn_19.setToolTip(hkparse["19"][1])
+        self.btn_21.setToolTip(hkparse["21"][1])
+        self.btn_22.setToolTip(hkparse["22"][1])
+        self.btn_23.setToolTip(hkparse["23"][1])
+        self.btn_24.setToolTip(hkparse["24"][1])
+        self.btn_25.setToolTip(hkparse["25"][1])
+        self.btn_26.setToolTip(hkparse["26"][1])
+        self.btn_27.setToolTip(hkparse["27"][1])
+        self.btn_28.setToolTip(hkparse["28"][1])
+        self.btn_29.setToolTip(hkparse["29"][1])
+        self.btn_31.setToolTip(hkparse["31"][1])
+        self.btn_32.setToolTip(hkparse["32"][1])
+        self.btn_33.setToolTip(hkparse["33"][1])
+        self.btn_34.setToolTip(hkparse["34"][1])
+        self.btn_35.setToolTip(hkparse["35"][1])
+        self.btn_36.setToolTip(hkparse["36"][1])
+        self.btn_37.setToolTip(hkparse["37"][1])
+        self.btn_38.setToolTip(hkparse["38"][1])
+        self.btn_39.setToolTip(hkparse["39"][1])
+        self.btn_41.setToolTip(hkparse["41"][1])
+        self.btn_42.setToolTip(hkparse["42"][1])
+        self.btn_43.setToolTip(hkparse["43"][1])
+        self.btn_44.setToolTip(hkparse["44"][1])
+        self.btn_45.setToolTip(hkparse["45"][1])
+        self.btn_46.setToolTip(hkparse["46"][1])
+        self.btn_47.setToolTip(hkparse["47"][1])
+        self.btn_48.setToolTip(hkparse["48"][1])
+        self.btn_49.setToolTip(hkparse["49"][1])
+        self.btn_51.setToolTip(hkparse["51"][1])
+        self.btn_52.setToolTip(hkparse["52"][1])
+        self.btn_53.setToolTip(hkparse["53"][1])
+        self.btn_54.setToolTip(hkparse["54"][1])
+        self.btn_55.setToolTip(hkparse["55"][1])
+        self.btn_56.setToolTip(hkparse["56"][1])
+        self.btn_57.setToolTip(hkparse["57"][1])
+        self.btn_58.setToolTip(hkparse["58"][1])
+        self.btn_59.setToolTip(hkparse["59"][1])
+        self.btn_61.setToolTip(hkparse["61"][1])
+        self.btn_62.setToolTip(hkparse["62"][1])
+        self.btn_63.setToolTip(hkparse["63"][1])
+        self.btn_64.setToolTip(hkparse["64"][1])
+        self.btn_65.setToolTip(hkparse["65"][1])
+        self.btn_66.setToolTip(hkparse["66"][1])
+        self.btn_67.setToolTip(hkparse["67"][1])
+        self.btn_68.setToolTip(hkparse["68"][1])
+        self.btn_69.setToolTip(hkparse["69"][1])
+        self.btn_71.setToolTip(hkparse["71"][1])
+        self.btn_72.setToolTip(hkparse["72"][1])
+        self.btn_73.setToolTip(hkparse["73"][1])
+        self.btn_74.setToolTip(hkparse["74"][1])
+        self.btn_75.setToolTip(hkparse["75"][1])
+        self.btn_76.setToolTip(hkparse["76"][1])
+        self.btn_77.setToolTip(hkparse["77"][1])
+        self.btn_78.setToolTip(hkparse["78"][1])
+        self.btn_79.setToolTip(hkparse["79"][1])
+        self.btn_81.setToolTip(hkparse["81"][1])
+        self.btn_82.setToolTip(hkparse["82"][1])
+        self.btn_83.setToolTip(hkparse["83"][1])
+        self.btn_84.setToolTip(hkparse["84"][1])
+        self.btn_85.setToolTip(hkparse["85"][1])
+        self.btn_86.setToolTip(hkparse["86"][1])
+        self.btn_87.setToolTip(hkparse["87"][1])
+        self.btn_88.setToolTip(hkparse["88"][1])
+        self.btn_89.setToolTip(hkparse["89"][1])
+        self.btn_104.setToolTip(hkparse["104"][1])
+        self.btn_105.setToolTip(hkparse["105"][1])
+        self.btn_106.setToolTip(hkparse["106"][1])
+        self.btn_107.setToolTip(hkparse["107"][1])
+        self.btn_108.setToolTip(hkparse["108"][1])
+        self.btn_109.setToolTip(hkparse["109"][1])
+        self.btn_110.setToolTip(hkparse["110"][1])
+        self.btn_111.setToolTip(hkparse["111"][1])
+
     def stop(self):
         mi.x = False
         self.btn_start.setEnabled(True)
         self.btn_start.setStyleSheet("background-color: #1f1f1f")
         self.btn_start.setText("Start")
 
-    def buttonselect(self, text, button, prevbtn):
+    def buttonselect(self, text, button, prevbtn):        
         if prevbtn != None and prevbtn != button: 
             prevbtn.setStyleSheet("background-color: #171717")
             button.setStyleSheet("background-color: #3c85cf")
             self.prevbtn = button
             self.bNum = text
-            print(self.bNum)
         elif prevbtn == button and self.bNum == text:
             button.setStyleSheet("background-color: #171717")
             self.prevbtn = button
             self.bNum = None
-            print(self.bNum)
         else:
             button.setStyleSheet("background-color: #3c85cf")
             self.prevbtn = button
             self.bNum = text
-            print(self.bNum)
+        print(self.bNum)
 
     def onActivated(self):
         msg = qtw.QMessageBox()
@@ -270,6 +357,7 @@ class MainWindow(qtw.QWidget):
                     if cmdInput and ok:
                         rr.shortkeys(self.bNum, cmdInput)
                         print("Finished")
+            self.hkparse()
         except:
             msg.setText("Select a button you want to change function of first")
             retval = msg.exec_()
@@ -316,10 +404,10 @@ if __name__ == '__main__':
     mw.setMinimumSize(400, 400)
     mw.setMaximumSize(600, 600)
 
-    # mw.setMinimumSize(screenGeometry.width()*0.1563, screenGeometry.height()*0.2778)
-    # mw.setMaximumSize(screenGeometry.width()*0.1564, screenGeometry.height()*0.2779)
+    # mw.setFixedSize(screenGeometry.width()*0.1564, screenGeometry.height()*0.2779)
     # mw.showMaximized()
     
     app.setStyle(qtw.QStyleFactory.create('Fusion'))
-    app.setStyleSheet("QPushButton, QLabel, QLineEdit, QComboBox, QAbstractItemView, QMessageBox {color: #c7c7c7;}")
+    app.setStyleSheet("QPushButton, QLabel, QLineEdit, QComboBox, QAbstractItemView, QMessageBox, QToolTip {color: #c7c7c7;}")
     app.exec_()
+    app.quit()
