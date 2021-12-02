@@ -19,10 +19,10 @@ def runMidi():
         print("--------------------------")
 
         try:
-            settings = ast.literal_eval(open("settings.txt").read())
+            settings = ast.literal_eval(open("txtfiles/settings.txt").read())
             chrome_path = settings['1'] 
             
-            hotkeys = ast.literal_eval(open("HotKeys.txt").read())
+            hotkeys = ast.literal_eval(open("txtfiles/HotKeys.txt").read())
             global x
             x = True
             while x:

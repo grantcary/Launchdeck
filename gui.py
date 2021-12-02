@@ -231,7 +231,7 @@ class MainWindow(qtw.QWidget):
         self.layout().addWidget(container, stretch=4)
 
     def hkparse(self):
-        hkparse = ast.literal_eval(open("HotKeys.txt").read())
+        hkparse = ast.literal_eval(open("txtfiles/HotKeys.txt").read())
         self.btn_11.setToolTip(hkparse["11"][1])
         self.btn_12.setToolTip(hkparse["12"][1])
         self.btn_13.setToolTip(hkparse["13"][1])
