@@ -23,5 +23,5 @@ How To Use:
 - Start Launchpad Midi input by pressing "Start"
 - Stop Midi input by pressing "Stop"
 
-###CURRENTLY ONLY RELIABLY WORKS ON WINDOWS
+### CURRENTLY ONLY RELIABLY WORKS ON WINDOWS
 Mac OS compatibility coming soon
