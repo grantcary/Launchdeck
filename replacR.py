@@ -1,7 +1,10 @@
+from pydub import AudioSegment
+from pydub.playback import play
+from urllib.parse import urlparse
+from shutil import copyfile
 import ast
 import os
 import json
-from urllib.parse import urlparse
 
 def opentxt():
     try:
@@ -34,6 +37,29 @@ def openexe(key_num, exepath):
             y += i
 
     appendList = [f"subprocess.Popen(['{str(address)}'])", "Open program: " + y[::-1].capitalize()]
+    hotkeys[key_num] = appendList
+    file = open("txtfiles/HotKeys.txt","r+")
+    file.truncate(0)
+    file.close()
+    with open("txtfiles/HotKeys.txt", "w") as writedict:
+        writedict.write(json.dumps(hotkeys))
+    print(f"Changed key {key_num} to {address}")
+
+def storesound(key_num, exepath):
+    opentxt()
+    address = exepath.replace("\\", "/")
+    
+    y = ""
+    for i in address[::-1]:
+        if i == "/":
+            break
+        y += i
+
+    # print("sound mark 1")
+    # # copyfile(exepath, f"/soundfiles/{y[::-1]}")
+    # print("sound mark 2")
+
+    appendList = [f"play(AudioSegment.from_mp3('''{str(address)}''') - 25)", "Play sound: " + y[::-1].capitalize()]
     hotkeys[key_num] = appendList
     file = open("txtfiles/HotKeys.txt","r+")
     file.truncate(0)

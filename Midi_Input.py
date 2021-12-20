@@ -1,3 +1,5 @@
+from pydub import AudioSegment
+from pydub.playback import play
 import time
 import pygame
 import pygame.midi
@@ -19,6 +21,10 @@ def runMidi():
         print("--------------------------")
 
         try:
+            AudioSegment.converter = r"C:\\ffmpeg\\bin\\ffmpeg.exe"
+            AudioSegment.ffmpeg = r"C:\\ffmpeg\\bin\\ffmpeg.exe"
+            AudioSegment.ffprobe = r"C:\\ffmpeg\\bin\\ffprobe.exe"
+
             settings = ast.literal_eval(open("txtfiles/settings.txt").read())
             chrome_path = settings['1'] 
             

@@ -338,7 +338,7 @@ class MainWindow(qtw.QWidget):
     def onActivated(self):
         msg = qtw.QMessageBox()
         msg.setStyleSheet("background-color: #1f1f1f; color: #bababa")
-        selectlist = ["Select Function", "Open File", "Open Tab", "Keyboard Shortcut"]
+        selectlist = ["Select Function", "Open File", "Play Sound", "Open Tab", "Keyboard Shortcut"]
         try:
             if isinstance(int(self.bNum), int) == True:
                 taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {self.bNum}", selectlist, 0, False)
@@ -346,6 +346,9 @@ class MainWindow(qtw.QWidget):
                     pass
                 elif taskselect == "Open File":
                     self.getFileDir("1")
+                    print("Finished")
+                elif taskselect == "Play Sound":
+                    self.getSoundFile()
                     print("Finished")
                 elif taskselect == "Open Tab":
                     urlInput, ok = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
@@ -368,7 +371,7 @@ class MainWindow(qtw.QWidget):
         if taskselect == "Chrome path":
             self.getFileDir("2")
             print("Finished")   
-
+            
     def getFileDir(self, func):
         file_filter = "Executable (*.exe)"
         response, ok = qtw.QFileDialog.getOpenFileName(
@@ -384,12 +387,25 @@ class MainWindow(qtw.QWidget):
             rr.chromepath(response)
             print(func)
 
+    def getSoundFile(self):
+        file_filter = "MP3 File (*.mp3)"
+        response, ok = qtw.QFileDialog.getOpenFileName(
+            parent=self,
+            caption="Select File",
+            directory=os.getcwd(),
+            filter=file_filter
+        )
+        print("yes")
+        rr.storesound(self.bNum, response)
+        print("Store Sound Stored")
+
     def execute(self):
         self.btn_start.setEnabled(False)
         self.btn_start.setStyleSheet("background-color: #3c85cf")
         self.btn_start.setText("Running")
         newthread = threading.Thread(target=mi.runMidi)
         newthread.start()
+
 
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
