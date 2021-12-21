@@ -45,21 +45,15 @@ def openexe(key_num, exepath):
         writedict.write(json.dumps(hotkeys))
     print(f"Changed key {key_num} to {address}")
 
-def storesound(key_num, exepath):
+def storesound(key_num, soundpath):
     opentxt()
-    address = exepath.replace("\\", "/")
+    address = soundpath.replace("\\", "/")
+    filename = os.path.basename(soundpath)
     
-    y = ""
-    for i in address[::-1]:
-        if i == "/":
-            break
-        y += i
+    copyfile(soundpath, f"""soundfiles/{filename}""")
+    print("Sound copied!")
 
-    # print("sound mark 1")
-    # # copyfile(exepath, f"/soundfiles/{y[::-1]}")
-    # print("sound mark 2")
-
-    appendList = [f"play(AudioSegment.from_mp3('''{str(address)}''') - 25)", "Play sound: " + y[::-1].capitalize()]
+    appendList = [f"play(AudioSegment.from_mp3('''soundfiles/{str(filename)}''') - 25)", "Play sound: " + filename]
     hotkeys[key_num] = appendList
     file = open("txtfiles/HotKeys.txt","r+")
     file.truncate(0)

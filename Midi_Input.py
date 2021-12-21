@@ -3,10 +3,21 @@ from pydub.playback import play
 import time
 import pygame
 import pygame.midi
+import multiprocessing
 import webbrowser
 import subprocess
 import keyboard
 import ast
+
+def evaluate(func):
+    eval(func)
+
+def getthreaded(func):
+    print("1")
+    newthread = multiprocessing.Process(target=evaluate, args=(func,))
+    print("2")
+    newthread.start()
+    print("3")
 
 def runMidi():
     try:
@@ -52,7 +63,10 @@ def runMidi():
 
                 if str(keynum) in hotkeys and velocity == 127:
                     try:
-                        eval(hotkeys[str(keynum)][0])
+                        if "Play sound:" in hotkeys[str(keynum)][1]:
+                            getthreaded(hotkeys[str(keynum)][0])
+                        else:
+                            eval(hotkeys[str(keynum)][0])
                     except:
                         print("Invalid cmd")
 
@@ -66,7 +80,5 @@ def runMidi():
 
         # if str(keynum) == "19":
         #     x = False
-
-
 
 # runMidi()

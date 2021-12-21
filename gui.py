@@ -406,7 +406,6 @@ class MainWindow(qtw.QWidget):
         newthread = threading.Thread(target=mi.runMidi)
         newthread.start()
 
-
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
     mw = MainWindow()
