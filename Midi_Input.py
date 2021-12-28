@@ -13,11 +13,8 @@ def evaluate(func):
     eval(func)
 
 def getthreaded(func):
-    print("1")
     newthread = multiprocessing.Process(target=evaluate, args=(func,))
-    print("2")
     newthread.start()
-    print("3")
 
 def runMidi():
     try:
