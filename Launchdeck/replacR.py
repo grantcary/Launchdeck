@@ -1,5 +1,4 @@
 from pydub import AudioSegment
-from pydub.playback import play
 from urllib.parse import urlparse
 from shutil import copyfile
 import ast
