@@ -1,3 +1,5 @@
+![gui](https://github.com/HelloZorex/Launchdeck/blob/main/img/screenshot1.png)
+
 ## Launchdeck
 
 Simple application that turns your novation launchpad mk2 into a customizable controller
