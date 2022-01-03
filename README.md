@@ -4,8 +4,8 @@
 
 Simple application that turns your novation launchpad mk2 into a customizable controller
 
-Download the installer [here](https://drive.google.com/uc?export=download&id=1QIt0CQ-FVVwGwG0nRhNUQnqNsvNkTUiU)
-*Currently only reliably works on windows
+Windows installer [here](https://drive.google.com/uc?export=download&id=1QIt0CQ-FVVwGwG0nRhNUQnqNsvNkTUiU)
+*Currently an outdated version
 
 ### Features:
 - open .exe file
