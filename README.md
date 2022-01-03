@@ -11,6 +11,7 @@ Download the installer [here](https://drive.google.com/uc?export=download&id=1QI
 - open .exe file
 - open chrome tab
 - execute keyboard shortcut
+- play sound
 
 ### How To Use:
 1. Connect your Novation Launchpad MK2 into your computer
