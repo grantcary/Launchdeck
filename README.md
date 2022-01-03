@@ -1,4 +1,4 @@
-![gui](https://github.com/HelloZorex/Launchdeck/blob/main/img/screenshot1.png)
+<img src='https://github.com/HelloZorex/Launchdeck/blob/main/img/screenshot1.png' alt='gui' width='200'>
 
 ## Launchdeck
 
