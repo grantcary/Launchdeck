@@ -7,6 +7,10 @@ Simple application that turns your novation launchpad mk2 into a customizable co
 Windows installer [here](https://drive.google.com/uc?export=download&id=1QIt0CQ-FVVwGwG0nRhNUQnqNsvNkTUiU)
 *Currently an outdated version
 
+```bash
+pip3 install git+https://github.com/HelloZorex/Launchdeck.git --upgrade
+```
+
 ### Features:
 - open .exe file
 - open chrome tab
