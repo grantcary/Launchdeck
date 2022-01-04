@@ -18,5 +18,5 @@ setup(name='Launchdeck',
     long_description_content_type='text/markdown',
     packages=['Launchdeck'],
     install_requires=parse_requirements('requirements.txt'),
-    python_requires='==3.9.6',
+    python_requires='>=3.9.6',
 )
