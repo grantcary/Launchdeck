@@ -10,7 +10,7 @@ setup(name='Launchdeck',
     description='Simple Movation Lauchpad button remapping application',
     url='https://github.com/HelloZorex/Launchdeck',
     author='Grant Cary',
-    packages=['Launchdeck'],
+    packages=['Launchdeck', 'Launchdeck/txtfiles'],
     install_requires=parse_requirements('requirements.txt'),
     python_requires='>=3.9.6',
 )
