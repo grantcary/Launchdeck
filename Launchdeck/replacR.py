@@ -8,7 +8,7 @@ import json
 def opentxt():
     try:
         global hotkeys
-        hotkeys = ast.literal_eval(open("txtfiles/HotKeys.txt").read())
+        hotkeys = ast.literal_eval(open("""./Launchdeck/txtfiles/HotKeys.txt""").read())
         return hotkeys
     except:
         print("Not a valid file")
@@ -16,7 +16,7 @@ def opentxt():
 def opensettings():
     try:
         global settings
-        settings = ast.literal_eval(open("txtfiles/settings.txt").read())
+        settings = ast.literal_eval(open("""./Launchdeck/txtfiles/settings.txt""").read())
         return settings
     except:
         print("Not a valid file")
@@ -37,10 +37,10 @@ def openexe(key_num, exepath):
 
     appendList = [f"subprocess.Popen(['{str(address)}'])", "Open program: " + y[::-1].capitalize()]
     hotkeys[key_num] = appendList
-    file = open("txtfiles/HotKeys.txt","r+")
+    file = open("""./Launchdeck/txtfiles/HotKeys.txt""","r+")
     file.truncate(0)
     file.close()
-    with open("txtfiles/HotKeys.txt", "w") as writedict:
+    with open("""./Launchdeck/txtfiles/HotKeys.txt""", "w") as writedict:
         writedict.write(json.dumps(hotkeys))
     print(f"Changed key {key_num} to {address}")
 
@@ -49,15 +49,15 @@ def storesound(key_num, soundpath):
     address = soundpath.replace("\\", "/")
     filename = os.path.basename(soundpath)
     
-    copyfile(soundpath, f"""soundfiles/{filename}""")
+    copyfile(soundpath, f"""./Launchdeck/soundfiles/{filename}""")
     print("Sound copied!")
 
-    appendList = [f"play(AudioSegment.from_mp3('''soundfiles/{str(filename)}''') - 25)", "Play sound: " + filename]
+    appendList = [f"play(AudioSegment.from_mp3('''./Launchdeck/soundfiles/{str(filename)}''') - 25)", "Play sound: " + filename]
     hotkeys[key_num] = appendList
-    file = open("txtfiles/HotKeys.txt","r+")
+    file = open("""./Launchdeck/txtfiles/HotKeys.txt""","r+")
     file.truncate(0)
     file.close()
-    with open("txtfiles/HotKeys.txt", "w") as writedict:
+    with open("""./Launchdeck/txtfiles/HotKeys.txt""", "w") as writedict:
         writedict.write(json.dumps(hotkeys))
     print(f"Changed key {key_num} to {address}")
 
@@ -67,10 +67,10 @@ def opentab(key_num, url):
     print(tempurl)
     appendList = [f"webbrowser.get(chrome_path).open('{str(url)}')", "Open tab: " + tempurl]
     hotkeys[key_num] = appendList
-    file = open("txtfiles/HotKeys.txt","r+")
+    file = open("""./Launchdeck/txtfiles/HotKeys.txt""","r+")
     file.truncate(0)
     file.close()
-    with open("txtfiles/HotKeys.txt", "w") as writedict:
+    with open("""./Launchdeck/txtfiles/HotKeys.txt""", "w") as writedict:
         writedict.write(json.dumps(hotkeys))
     print(f"Changed key {key_num} to {url}")
 
@@ -78,10 +78,10 @@ def shortkeys(key_num, kbsc):
     opentxt()
     appendList = [f"keyboard.press_and_release('{str(kbsc)}')", "Keyboard shortcut: " + str(kbsc)]
     hotkeys[key_num] = appendList
-    file = open("txtfiles/HotKeys.txt","r+")
+    file = open("""./Launchdeck/txtfiles/HotKeys.txt""","r+")
     file.truncate(0)
     file.close()
-    with open("txtfiles/HotKeys.txt", "w") as writedict:
+    with open("""./Launchdeck/txtfiles/HotKeys.txt""", "w") as writedict:
         writedict.write(json.dumps(hotkeys))
     print(f"Changed key {key_num} to {kbsc}")
 
@@ -90,9 +90,9 @@ def chromepath(chrome):
     address = chrome.replace("\\", "/")
     address = f"{str(address)} %s"
     settings['1'] = str(address)
-    file = open("txtfiles/settings.txt","r+")
+    file = open("""./Launchdeck/txtfiles/settings.txt""","r+")
     file.truncate(0)
     file.close()
-    with open("txtfiles/settings.txt", "w") as writedict:
+    with open("""./Launchdeck/txtfiles/settings.txt""", "w") as writedict:
         writedict.write(json.dumps(settings))
     print(f"Changed key chrome path to {address}")

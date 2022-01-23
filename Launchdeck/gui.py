@@ -11,6 +11,7 @@ class MainWindow(qtw.QWidget):
         super().__init__()
         self.setWindowTitle('Launchdeck')
         self.setWindowOpacity(0.99)
+        # self.setWindowIcon(qtw.QIcon('LD.ico')) FIX THIS
         self.setStyleSheet("background-color: #1f1f1f;")
         # self.setStyleSheet("background-color: rgba(31, 31, 31, 50);")
         # self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
@@ -54,7 +55,11 @@ class MainWindow(qtw.QWidget):
         container.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
         # container.setStyleSheet("background-color: #171717; border-radius: 5px;")
         container.setStyleSheet("background-color: #171717; padding: 10px;")
-        
+
+        # Button creator - doesn't work when trying to change color of button after it's been created
+        # for i in range(11,112):
+        #     exec(eval("f'self.btn_{i} = qtw.QPushButton(clicked = lambda: self.buttonselect(\"{i}\", self.btn_{i}, self.prevbtn))'"))
+
         self.prevbtn = None
         self.btn_11 = qtw.QPushButton(clicked = lambda: self.buttonselect("11", self.btn_11, self.prevbtn))
         self.btn_12 = qtw.QPushButton(clicked = lambda: self.buttonselect('12', self.btn_12, self.prevbtn))
@@ -231,7 +236,7 @@ class MainWindow(qtw.QWidget):
         self.layout().addWidget(container, stretch=4)
 
     def hkparse(self):
-        hkparse = ast.literal_eval(open("txtfiles/HotKeys.txt").read())
+        hkparse = ast.literal_eval(open("""./Launchdeck/txtfiles/HotKeys.txt""").read())
         self.btn_11.setToolTip(hkparse["11"][1])
         self.btn_12.setToolTip(hkparse["12"][1])
         self.btn_13.setToolTip(hkparse["13"][1])
@@ -395,7 +400,6 @@ class MainWindow(qtw.QWidget):
             directory=os.getcwd(),
             filter=file_filter
         )
-        print("yes")
         rr.storesound(self.bNum, response)
         print("Store Sound Stored")
 

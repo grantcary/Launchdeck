@@ -33,10 +33,10 @@ def runMidi():
             AudioSegment.ffmpeg = r"C:\\ffmpeg\\bin\\ffmpeg.exe"
             AudioSegment.ffprobe = r"C:\\ffmpeg\\bin\\ffprobe.exe"
 
-            settings = ast.literal_eval(open("txtfiles/settings.txt").read())
+            settings = ast.literal_eval(open("""./Launchdeck/txtfiles/settings.txt""").read())
             chrome_path = settings['1'] 
             
-            hotkeys = ast.literal_eval(open("txtfiles/HotKeys.txt").read())
+            hotkeys = ast.literal_eval(open("""./Launchdeck/txtfiles/HotKeys.txt""").read())
             global x
             x = True
             while x:
