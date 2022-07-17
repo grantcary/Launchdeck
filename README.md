@@ -4,8 +4,10 @@
 
 Simple application that turns your novation launchpad mk2 into a customizable controller
 
-Windows installer [here](https://drive.google.com/uc?export=download&id=1QIt0CQ-FVVwGwG0nRhNUQnqNsvNkTUiU)
-*Currently an outdated version
+```
+python gui.py
+```
+*Currently supported on windows, linux coming soon
 
 <!--```bash-->
 <!--pip3 install git+https://github.com/HelloZorex/Launchdeck.git --upgrade-->
