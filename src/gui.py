@@ -1,10 +1,14 @@
-import PyQt5.QtWidgets as qtw
 import threading
-import Midi_Input as mi
-import replacR as rr
-import ast
+import json
 import sys
 import os
+
+import PyQt5.QtWidgets as qtw
+# from qtwidgets import AnimatedToggle
+        
+import midi as mi
+import mapper as rr
+
 
 class MainWindow(qtw.QWidget):
     def __init__(self):
@@ -19,7 +23,7 @@ class MainWindow(qtw.QWidget):
         self.setLayout(qtw.QVBoxLayout())
         self.topgrid()
         self.buttongrid()
-        self.hkparse()
+        self.tooltip()
 
         self.show()
 
@@ -29,21 +33,19 @@ class MainWindow(qtw.QWidget):
         container2.setStyleSheet("padding: 8px; QInputDialog {background-color: #bababa;}")
         container2.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
 
-        settings = qtw.QPushButton('Settings', clicked = self.settings)
-        settings.setToolTip("Change Settings")
-        settings.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
-        btn_func = qtw.QPushButton('Change func', clicked = self.onActivated)
+        btn_func = qtw.QPushButton('Functions', clicked = self.onActivated)
         btn_func.setToolTip("Change function of button")
         btn_func.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
-        self.btn_start = qtw.QPushButton('Start', clicked = self.execute)
+        
+        self.btn_start = qtw.QPushButton('Start', clicked = self.run)
         self.btn_start.setToolTip("Start Launchpad")
         self.btn_start.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
+        
         btn_stop = qtw.QPushButton('Stop', clicked = self.stop)
         btn_stop.setToolTip("Stop Launchpad")
         btn_stop.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
 
-        container2.layout().addWidget(settings, 0, 0)
-        container2.layout().addWidget(btn_func, 0, 1)       
+        container2.layout().addWidget(btn_func, 0, 1)        
         container2.layout().addWidget(self.btn_start, 0, 2)
         container2.layout().addWidget(btn_stop, 0, 3)
 
@@ -235,8 +237,10 @@ class MainWindow(qtw.QWidget):
 
         self.layout().addWidget(container, stretch=4)
 
-    def hkparse(self):
-        hkparse = ast.literal_eval(open("""./Launchdeck/txtfiles/HotKeys.txt""").read())
+    def tooltip(self):
+        with open('keymap.json', 'r') as d:
+            hkparse = json.load(d)
+
         self.btn_11.setToolTip(hkparse["11"][1])
         self.btn_12.setToolTip(hkparse["12"][1])
         self.btn_13.setToolTip(hkparse["13"][1])
@@ -318,79 +322,83 @@ class MainWindow(qtw.QWidget):
         self.btn_110.setToolTip(hkparse["110"][1])
         self.btn_111.setToolTip(hkparse["111"][1])
 
-    def stop(self):
-        mi.x = False
-        self.btn_start.setEnabled(True)
-        self.btn_start.setStyleSheet("background-color: #1f1f1f")
-        self.btn_start.setText("Start")
-
     def buttonselect(self, text, button, prevbtn):        
         if prevbtn != None and prevbtn != button: 
             prevbtn.setStyleSheet("background-color: #171717")
             button.setStyleSheet("background-color: #3c85cf")
             self.prevbtn = button
             self.bNum = text
+        
         elif prevbtn == button and self.bNum == text:
             button.setStyleSheet("background-color: #171717")
             self.prevbtn = button
             self.bNum = None
+        
         else:
             button.setStyleSheet("background-color: #3c85cf")
             self.prevbtn = button
             self.bNum = text
-        print(self.bNum)
+
+        if isinstance(self.bNum, str):
+            print(self.bNum)
 
     def onActivated(self):
         msg = qtw.QMessageBox()
         msg.setStyleSheet("background-color: #1f1f1f; color: #bababa")
         selectlist = ["Select Function", "Open File", "Play Sound", "Open Tab", "Keyboard Shortcut"]
+        
         try:
-            if isinstance(int(self.bNum), int) == True:
-                taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {self.bNum}", selectlist, 0, False)
+            if isinstance(int(self.bNum), int):
+                taskselect, _ = qtw.QInputDialog.getItem(self, "Select Function", f"Select Function for key {self.bNum}", selectlist, 0, False)
+          
                 if taskselect == "Select Function":
                     pass
+          
                 elif taskselect == "Open File":
                     self.getFileDir("1")
                     print("Finished")
+          
                 elif taskselect == "Play Sound":
                     self.getSoundFile()
                     print("Finished")
+          
                 elif taskselect == "Open Tab":
-                    urlInput, ok = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
-                    if urlInput and ok:
-                        rr.opentab(self.bNum, urlInput)
+                    url, ok = qtw.QInputDialog.getText(self, "Open Tab", "Enter url:")
+                    
+                    if url and ok:
+                        rr.opentab(self.bNum, url)
                         print("Finished")
+                
                 elif taskselect == "Keyboard Shortcut":
-                    cmdInput, ok = qtw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter keyboard shortcut:")
-                    if cmdInput and ok:
-                        rr.shortkeys(self.bNum, cmdInput)
+                    shortkey, ok = qtw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter keyboard shortcut:")
+                
+                    if shortkey and ok:
+                        rr.shortkeys(self.bNum, shortkey)
                         print("Finished")
-            self.hkparse()
+            
+            self.tooltip()
+        
         except:
             msg.setText("Select a button you want to change function of first")
             retval = msg.exec_()
 
     def settings(self):
         selectlist = ["Select setting", "Chrome path"]
-        taskselect, tsbool = qtw.QInputDialog.getItem(self, "Select setting", "Select setting", selectlist)
+        taskselect, _ = qtw.QInputDialog.getItem(self, "Select setting", "Select setting", selectlist)
         if taskselect == "Chrome path":
             self.getFileDir("2")
-            print("Finished")   
+            print("Finished")
             
     def getFileDir(self, func):
         file_filter = "Executable (*.exe)"
-        response, ok = qtw.QFileDialog.getOpenFileName(
+        response, _ = qtw.QFileDialog.getOpenFileName(
             parent=self,
             caption="Select File",
             directory=os.getcwd(),
             filter=file_filter
         )
-        if func == "1":
-            rr.openexe(self.bNum, response)
-            print(func)
-        elif func == "2":
-            rr.chromepath(response)
-            print(func)
+
+        rr.openexe(self.bNum, response)
 
     def getSoundFile(self):
         file_filter = "MP3 File (*.mp3)"
@@ -403,14 +411,27 @@ class MainWindow(qtw.QWidget):
         rr.storesound(self.bNum, response)
         print("Store Sound Stored")
 
-    def execute(self):
+    def stop(self):
+        self.m.stop()
+
+        self.btn_start.setEnabled(True)
+        self.btn_start.setStyleSheet("background-color: #1f1f1f")
+        self.btn_start.setText("Start")
+
+    def run(self):
         self.btn_start.setEnabled(False)
         self.btn_start.setStyleSheet("background-color: #3c85cf")
         self.btn_start.setText("Running")
-        newthread = threading.Thread(target=mi.runMidi)
-        newthread.start()
 
-if __name__ == '__main__':
+        self.m = mi.Midi()
+        try:
+            self.newthread = threading.Thread(target=self.m.start)
+            self.newthread.start()
+        except:
+            print("Midi not connected")
+
+
+if __name__ == "__main__":
     app = qtw.QApplication(sys.argv)
     mw = MainWindow()
 

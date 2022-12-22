@@ -1,7 +1,12 @@
-
-txtfiles/HotKeys - Copy.txt
 __pycache__
-__pycache__/Midi_Input.cpython-39.pyc
-__pycache__/replacR.cpython-39.pyc
-__pycache__/Midi_Input.cpython-39.pyc
-__pycache__/replacR.cpython-39.pyc
+notebooks
+.*.swp
+.*.swo
+*.pyc
+build
+dist
+*.egg-info
+/env
+a.out
+boxes.jpg
+weights/*
