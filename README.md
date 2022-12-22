@@ -1,5 +1,5 @@
 # Launchdeck
-<img src='https://github.com/grantcary/Launchdeck/blob/main/img/LD.ico' alt='icon' width='100'>
+<img src='https://github.com/grantcary/Launchdeck/blob/main/img/LD.ico' alt='icon' width='200'>
 
 Launchdeck is a simple GUI application that lets you set custom buttons on your launchpad midi controller
 
