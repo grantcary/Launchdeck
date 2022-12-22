@@ -1,9 +1,7 @@
 # Launchdeck
 <img src='https://github.com/grantcary/Launchdeck/blob/main/img/LD.ico' alt='icon' width='100'>
 
-Simple application that turns your novation launchpad into a customizable controller
-
-<img src='https://github.com/HelloZorex/Launchdeck/blob/main/img/screenshot1.png' alt='gui' width='400'>
+Launchdeck is a simple GUI application that lets you set custom buttons on your launchpad midi controller
 
 ## Setup
 ```
@@ -11,12 +9,18 @@ git clone https://github.com/grantcary/Launchdeck.git
 cd Launchdeck
 pip3 install -r requirements.txt
 ```
+
 ## Usage
 ```
-cd src
-python gui.py
+usage:
+    cd src
+    python gui.py
 ```
+
+### Support
 Only Windows is officially supported
+Supported midi controllers:
+- Novation Launchpad MK2
 
 ### Features:
 - open executable file
@@ -24,7 +28,7 @@ Only Windows is officially supported
 - hot keys
 - play sound
 
-### GUI Tutorial:
+### How to Use:
 1. Connect your Novation Launchpad into your computer
 2. Run GUI
 3. Select a button you desire to change, then select "Change Func"
