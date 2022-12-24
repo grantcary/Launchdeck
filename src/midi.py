@@ -20,7 +20,8 @@ class Midi:
 
   def start(self):
     pygame.midi.init()
-    self.midi_in = pygame.midi.Input(3)
+    # Linux: pygame.midi.Input(3)
+    self.midi_in = pygame.midi.Input(1)
     midi_start_time = pygame.midi.time()
 
     map = self.open_file(KEYMAP)

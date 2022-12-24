@@ -5,7 +5,8 @@ import subprocess
 from pydub import AudioSegment
 from pydub.playback import play
 
-AudioSegment.converter = r'/usr/bin/ffmpeg'
+# Linux: r'/usr/bin/ffmpeg'
+AudioSegment.converter = r"C:\\ffmpeg\\bin\\ffmpeg.exe"
 
 def shortcut(key): keyboard.send(str(key))
 def open_tab(url): webbrowser.open_new_tab(url)
