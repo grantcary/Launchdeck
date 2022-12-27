@@ -7,18 +7,24 @@ import json
 KEYMAP = 'keymap.json'
 
 class Midi:
-  def open_file(self, path):
+  def open_file(self, path: str) -> dict:
       with open(path, 'r') as d:
           return json.load(d)
 
-  def new_process(self, func):
+  def new_process(self, func: str) -> None:
       newthread = multiprocessing.Process(target=ev.play_sound, args=(func,))
       newthread.start()
 
-  def stop(self):
+  def execute_func(self, data: str, func: str) -> None:
+    if func == 'open_tab': ev.open_tab(data)
+    elif func == 'short_key': ev.shortcut(data)
+    elif func == 'open_exe': ev.exe(data)
+    elif func == 'store_sound': self.new_process(data)
+
+  def stop(self) -> None:
     self.run = False
 
-  def start(self):
+  def start(self) -> None:
     pygame.midi.init()
     # Linux: pygame.midi.Input(3)
     self.midi_in = pygame.midi.Input(1)
@@ -42,19 +48,12 @@ class Midi:
       _, keynum, velocity, _ = midi_note
       
       key = str(keynum)
-      data, desc = map[key][0], map[key][1][:11]
+      data, desc, func = map[key][0], map[key][1], map[key][2]
 
       # delays registering midi input until 300ms after starting function because of odd buffer behavior
-      if key in map and velocity == 127 and timestamp > (midi_start_time+300):                
-        if "Play sound:" in desc:
-          self.new_process(data)
-        elif "Open program:" in desc:
-          ev.exe(data)
-        elif "Open tab:" in desc:
-          ev.open_tab(data)
-        elif "Hotkey:" in desc:
-          ev.shortcut(data)
-                
+      if key in map and velocity == 127 and timestamp > (midi_start_time+300):         
+        self.execute_func(data, func)
+
     pygame.midi.Input.close(self.midi_in)
     pygame.midi.quit()
 
