@@ -16,10 +16,11 @@ class Midi:
       newthread.start()
 
   def execute_func(self, data: str, func: str) -> None:
-    if func == 'open_tab': ev.open_tab(data)
-    elif func == 'short_key': ev.shortcut(data)
-    elif func == 'open_exe': ev.exe(data)
-    elif func == 'store_sound': self.new_process(data)
+    match func:
+      case 'open_tab': ev.open_tab(data)
+      case 'short_key': ev.shortcut(data)
+      case 'open_exe': ev.exe(data)
+      case 'store_sound': self.new_process(data)
 
   def stop(self) -> None:
     self.run = False
@@ -56,17 +57,3 @@ class Midi:
 
     pygame.midi.Input.close(self.midi_in)
     pygame.midi.quit()
-
-# closing the thread manually does not stop from piling up input stream
-# the function does terminate once conditions are reached
-# deleting variable that stores the class instance does nothing
-# importing the module only once prompted to start doesn't fix the problem
-# if i close the gui window before stoping midi input, midi input continues to run
-# very bad bug. open gui, run, press buttons, stop, press buttons, close window, re-open gui, press start, button presses registered from previous instance of gui
-# it has something to do with the event loop i think. because even when the program is closed, there is a back log of registered events in queue
-# in one gui instance, if you start and stop then start again the event loop, it just continues the previous event, based on the timestamps
-# button presses registered before starting loop have timestamps that coincide with timestamps after starting the loop
-# so aparently i was somewhat right, it doesn't have anything to do with threading, but i don't think it has to do with the event loop any more
-# it must have something to do with a driver or something queuing up button presses once midi device is instantized
-# i don't think this is a problem i can fix without a hacky solution, like giving a 3 second count down before allowing button presses, freeing up queue
-# hacky fix by adding 300ms of delay before starting to register button presses

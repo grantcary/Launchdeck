@@ -1,5 +1,4 @@
 from urllib.parse import urlparse
-from shutil import copyfile
 import ast
 import os
 import json
@@ -24,9 +23,7 @@ def storesound(key: str, soundpath: str) -> None:
     map = openmap()
     address = path_reformat(soundpath)
     filename = os.path.basename(soundpath)
-    
-    copyfile(soundpath, f'soundfiles/{filename}')
-    map[key] = [str(filename), "Play sound: " + filename, 'store_sound']
+    map[key] = [address, "Play sound: " + filename, 'store_sound']
     write_to_file(map)
 
 def opentab(key: str, url: str) -> None:

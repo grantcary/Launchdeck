@@ -165,7 +165,7 @@ class MainWindow(Qw.QWidget):
         response, _ = Qw.QFileDialog.getOpenFileName(parent=self, caption="Select File", directory=os.getcwd(), filter=file_filter)
         if response:
             mp.storesound(pos, response)
-            print("Store Sound Stored")
+            print("Sound Stored")
             self.set_tooltip()
 
     def reset_key(self, pos: str) -> None:

@@ -1,4 +1,4 @@
 keyboard==0.13.5
-pydub==0.24.1
+pydub==0.25.1
 pygame==2.1.2
 PyQt5==5.15.7
