@@ -38,5 +38,5 @@ def shortkeys(key: str, keyshort: str) -> None:
 
 def reset(key: str) -> None:
     map = openmap()
-    map[key] = ['', '', '']
+    map[key] = ['', 'None', '']
     write_to_file(map)
