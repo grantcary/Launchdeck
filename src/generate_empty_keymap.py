@@ -1,4 +1,5 @@
 import json
+
 MAP_PATH = 'keymap.json'
 
 keymap = {}
