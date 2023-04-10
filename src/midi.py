@@ -1,9 +1,18 @@
+#!/usr/bin/env python3
+
 from time import sleep
 import multiprocessing
 import evaluate as ev
 import pygame.midi
 import json
+import platform
 
+PLATFORM_SYSTEM_MAP = {
+    'Windows': 1,
+    'Linux': 3
+}
+
+SYSTEM = PLATFORM_SYSTEM_MAP.get(platform.system())
 MAP_PATH = 'keymap.json'
 
 class Midi:
@@ -16,11 +25,10 @@ class Midi:
     newthread.start()
 
   def execute_func(self, data: str, func: str) -> None:
-    match func:
-      case 'open_tab': ev.open_tab(data)
-      case 'short_key': ev.shortcut(data)
-      case 'open_exe': ev.exe(data)
-      case 'store_sound': self.new_process(data)
+    if func == 'open_tab': ev.open_tab(data)
+    elif func == 'short_key': ev.shortcut(data)
+    elif func == 'open_exe': ev.exe(data)
+    elif func == 'store_sound': self.new_process(data)
 
   def stop(self) -> None:
     self.run = False
@@ -28,7 +36,8 @@ class Midi:
   def start(self) -> None:
     pygame.midi.init()
     # Linux: pygame.midi.Input(3)
-    self.midi_in = pygame.midi.Input(1)
+    # Windows: pygame.midi.Input(1)
+    self.midi_in = pygame.midi.Input(SYSTEM)
     midi_start_time = pygame.midi.time()
 
     map = self.open_file(MAP_PATH)

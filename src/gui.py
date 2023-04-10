@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import threading
 import json
 import sys
@@ -10,6 +12,7 @@ import PyQt5.QtGui as Qg
 
 import midi as mi
 from mapper import opentab, shortkeys, openexe, storesound, reset
+import virtual_midi as vm
 
 MAP_PATH = 'keymap.json'
 
@@ -24,6 +27,10 @@ class MainWindow(Qw.QWidget):
     self.setLayout(Qw.QVBoxLayout())
 
     self.start_flag = False
+    self.passthrough_flag = False
+
+    self.virtual_midi = vm.VirtualMidi()
+    self.midi = mi.Midi()
     
     self.top_grid()
     self.button_generator()
@@ -99,7 +106,14 @@ class MainWindow(Qw.QWidget):
           if btn_column == 8: container.layout().addItem(spacer, btn_row, btn_column)
           else:
             # button 112 is out of bounds, pass over and continue
-            if pos != '112':
+            if pos == '112':
+              # pos = str(int(pos)-1)
+              self.buttons[pos] = Qw.QPushButton(clicked = self.passthrough)
+              self.buttons[pos].setStyleSheet("QPushButton {background-color : #001e47}")
+              self.buttons[pos].setToolTip('Virtual Midi Passthrough Mode: OFF')
+              container.layout().addWidget(self.buttons[pos], btn_row, btn_column)
+              column_cnt+=1
+            else:
               # create button, add to widget, create action event for button
               self.buttons[pos] = Qw.QPushButton(clicked = lambda ignore, x=pos: self.button_press(x))
               self.buttons[pos].setStyleSheet("QPushButton {background-color : #171717} QPushButton::pressed {background-color : #3c85cf}")
@@ -125,7 +139,8 @@ class MainWindow(Qw.QWidget):
       self.hkparse = json.load(d)
 
       for key in self.buttons.keys():
-        self.buttons[key].setToolTip(self.hkparse[key][1])
+        if key != '112':
+          self.buttons[key].setToolTip(self.hkparse[key][1])
 
   # lets you use gui buttons without midi controller connected
   def button_press(self, text: str) -> None:
@@ -135,21 +150,45 @@ class MainWindow(Qw.QWidget):
       midi_button_press.execute_func(data, func)
 
   def change_button_func(self, func: str, pos: str) -> None:
-    match func:
-      case 'Change Tab':
-        url, ok = Qw.QInputDialog.getText(self, "Open Tab", "Enter url:")
-        if url and ok: opentab(pos, url)
-      case 'Change Hotkey':
-        shortkey, ok = Qw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter keyboard shortcut:")
-        if shortkey and ok: shortkeys(pos, shortkey)
-      case 'Change Application':
-        response, _ = Qw.QFileDialog.getOpenFileName(parent=self, caption="Select File", directory=os.getcwd(), filter="Executable (*.exe)")
-        if response: openexe(pos, response)
-      case 'Change Sound':
-        response, _ = Qw.QFileDialog.getOpenFileName(parent=self, caption="Select File", directory=os.getcwd(), filter="MP3 File (*.mp3)")
-        if response: storesound(pos, response)
-      case 'Reset Button': reset(pos)
+    if func == 'Change Tab':
+      url, ok = Qw.QInputDialog.getText(self, "Open Tab", "Enter url:")
+      if url and ok: opentab(pos, url)
+    elif func == 'Change Hotkey':
+      shortkey, ok = Qw.QInputDialog.getText(self, "Keyboard Shortcut", "Enter keyboard shortcut:")
+      if shortkey and ok: shortkeys(pos, shortkey)
+    elif func == 'Change Application':
+      response, _ = Qw.QFileDialog.getOpenFileName(parent=self, caption="Select File", directory=os.getcwd(), filter="Executable (*.exe)")
+      if response: openexe(pos, response)
+    elif func == 'Change Sound':
+      response, _ = Qw.QFileDialog.getOpenFileName(parent=self, caption="Select File", directory=os.getcwd(), filter="MP3 File (*.mp3)")
+      if response: storesound(pos, response)
+    elif func == 'Reset Button': reset(pos)
     self.set_tooltip()
+
+  def disable_buttons(self) -> None:
+    for key in self.buttons.keys():
+      if key != '112':
+       self.buttons[key].setEnabled(False)
+       self.buttons[key].setStyleSheet("QPushButton {background-color : #0f0f0f}")
+  
+  def enable_buttons(self) -> None:
+    for key in self.buttons.keys():
+      if key != '112':
+       self.buttons[key].setEnabled(True)
+       self.buttons[key].setStyleSheet("QPushButton {background-color : #171717} QPushButton::pressed {background-color : #3c85cf}")
+
+  def passthrough(self) -> None:
+    if self.start_flag == False:
+      if self.passthrough_flag:
+        self.enable_buttons()
+        self.passthrough_flag = False
+        self.buttons['112'].setStyleSheet("QPushButton {background-color : #001e47}")
+        self.buttons['112'].setToolTip('Virtual Midi Passthrough Mode: OFF')
+      else:
+        self.disable_buttons()
+        self.passthrough_flag = True
+        self.buttons['112'].setStyleSheet("QPushButton {background-color : #003580}")
+        self.buttons['112'].setToolTip('Virtual Midi Passthrough Mode: ON')
 
   def run(self) -> None:
     self.btn_start.setEnabled(False)
@@ -157,8 +196,8 @@ class MainWindow(Qw.QWidget):
     self.btn_start.setText("Running")
 
     self.start_flag = True
+    self.m = self.virtual_midi if self.passthrough_flag else self.midi
 
-    self.m = mi.Midi()
     try:
       self.newthread = threading.Thread(target=self.m.start)
       self.newthread.start()

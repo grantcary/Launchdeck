@@ -1,4 +1,7 @@
 keyboard==0.13.5
-pydub==0.25.1
+mido==1.2.10
+pydub==0.24.1
 pygame==2.1.2
-PyQt5==5.15.7
+PyQt5==5.15.9
+python_rtmidi==1.4.9
+rtmidi==2.3.4

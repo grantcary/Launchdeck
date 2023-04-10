@@ -1,12 +1,23 @@
+#!/usr/bin/env python3
+
 import webbrowser
 import keyboard
 import subprocess
+import platform
 
 from pydub import AudioSegment
 from pydub.playback import play
 
+PLATFORM_SYSTEM_MAP = {
+    'Windows': r"C:\\ffmpeg\\bin\\ffmpeg.exe",
+    'Linux': r'/usr/bin/ffmpeg'
+}
+
+SYSTEM = PLATFORM_SYSTEM_MAP.get(platform.system())
+
 # Linux: r'/usr/bin/ffmpeg'
-AudioSegment.converter = r"C:\\ffmpeg\\bin\\ffmpeg.exe"
+# Windows: r"C:\\ffmpeg\\bin\\ffmpeg.exe"
+AudioSegment.converter = SYSTEM
 
 def shortcut(key: str) -> None: keyboard.send(str(key))
 def open_tab(url: str) -> None: webbrowser.open_new_tab(url)

@@ -18,9 +18,8 @@ usage:
 ```
 
 ### Support
-Only Windows is officially supported
-Supported midi controllers:
-- Novation Launchpad MK2
+- Only Windows is officially supported (full Linux support comming soon)
+- Compatible midi controllers: Novation Launchpad (MK1, MK2)
 
 To reset all assigned keys, run:
 ```
@@ -32,6 +31,7 @@ python generate_empty_keymap.py
 - open browser tab
 - assign hot keys
 - play sound
+- virtual midi passthrough
 
 ### How to Use:
 1. Connect your Novation Launchpad into your computer
@@ -41,6 +41,12 @@ python generate_empty_keymap.py
 5. Test button function by left clicking the desired button
 6. Start Launchpad Midi input by pressing "Start"
 7. Stop Midi input by pressing "Stop"
+
+### To use the Virtual Midi passthrough:
+1. On your DAW of choice, select midi input 'Launchdeck:RtMidi virtual output'
+2. Click the blue button on the upper right corner
+3. Press "Start"
+* *you can't use default midi functions while passthrough mode is in use and viceversa*
 
 - *keyboard shortcut example: "command", "control + s", "left", "up", "command + space"*
 - *hover over the button to check its assignment (tooltip)*

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json
 
 MAP_PATH = 'keymap.json'
