@@ -50,7 +50,6 @@ class Midi:
         if self.run == False:
           pygame.midi.Input.close(self.midi_in)
           pygame.midi.quit()
-          print("Terminated")
           return
         sleep(0.1)
               
