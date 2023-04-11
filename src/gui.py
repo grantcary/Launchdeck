@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import functools
 import threading
 import json
 import sys
@@ -88,10 +89,13 @@ class MainWindow(Qw.QWidget):
     self.action_events = {}
     spacer = Qw.QSpacerItem(40, 30)
 
+    size = 10
+    for row in range(size):
+      container.layout().addItem(Qw.QSpacerItem(40, 30), row, 8)
+
     # starts position at 104, ends at 19
     # the tens place descends, but the ones place ascends
     # pattern: 48, 49, 31, 32........38, 39, 21, 22, etc
-    size = 10
     for btn_row in range(size):
       # top row seperator
       if btn_row == 1: container.layout().addItem(spacer, 1, 0)
@@ -103,8 +107,9 @@ class MainWindow(Qw.QWidget):
           pos = str(num+3) if (btn_row==0) else str(num)
 
           # right side column seperator
-          if btn_column == 8: container.layout().addItem(spacer, btn_row, btn_column)
-          else:
+          # if btn_column == 8: container.layout().addItem(spacer, btn_row, btn_column)
+          # if btn_column == 8: pass
+          if btn_column != 8:
             # button 112 is out of bounds, pass over and continue
             if pos == '112':
               # pos = str(int(pos)-1)
@@ -115,7 +120,7 @@ class MainWindow(Qw.QWidget):
               column_cnt+=1
             else:
               # create button, add to widget, create action event for button
-              self.buttons[pos] = Qw.QPushButton(clicked = lambda ignore, x=pos: self.button_press(x))
+              self.buttons[pos] = Qw.QPushButton(clicked=functools.partial(self.button_press, pos))
               self.buttons[pos].setStyleSheet("QPushButton {background-color : #171717} QPushButton::pressed {background-color : #3c85cf}")
               container.layout().addWidget(self.buttons[pos], btn_row, btn_column)
               self.action_events[pos] = action_menu(self.buttons[pos], pos)
@@ -213,6 +218,12 @@ class MainWindow(Qw.QWidget):
       self.btn_start.setStyleSheet("background-color: #171717")
       self.btn_start.setText("Start")
 
+  def closeEvent(self, event: Qg.QCloseEvent) -> None:
+    self.stop()
+    self.close()
+    app.quit()
+    event.accept()
+
 if __name__ == "__main__":
   app = Qw.QApplication(sys.argv)
   mw = MainWindow()
@@ -223,4 +234,3 @@ if __name__ == "__main__":
   app.setStyle(Qw.QStyleFactory.create('Fusion'))
   app.setStyleSheet("QPushButton, QLabel, QLineEdit, QComboBox, QAbstractItemView, QMessageBox, QToolTip, QMenu {color: #c7c7c7;}")
   app.exec_()
-  app.quit()

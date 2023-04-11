@@ -2,10 +2,12 @@
 
 from time import sleep
 import multiprocessing
-import evaluate as ev
-import pygame.midi
-import json
 import platform
+import json
+
+import pygame.midi
+
+import evaluate as ev
 
 PLATFORM_SYSTEM_MAP = {
     'Windows': 1,

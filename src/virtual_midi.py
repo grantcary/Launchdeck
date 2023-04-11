@@ -35,7 +35,7 @@ while time.time() - start_time < timeout:
 
 class VirtualMidi:
   def __init__(self):
-    self.inport = mido.open_input(input_port_name)
+    self.inport = mido.open_input(input_port_name, block=False, timeout=0.1)
     self.rtmidi_output = rtmidi.MidiOut(name='Launchdeck')
     self.outport = self.rtmidi_output.open_virtual_port()
     self.run = False
@@ -45,10 +45,10 @@ class VirtualMidi:
 
   def start(self):
     self.run = True
+
     while self.run:
       msg = self.inport.receive()
-      # print(msg)
-
       if msg:
         self.outport.send_message(msg.bytes())
-        # print("Message sent:", msg)
+
+    print('Terminated')
