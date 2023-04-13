@@ -89,9 +89,16 @@ class MainWindow(Qw.QWidget):
     self.action_events = {}
     spacer = Qw.QSpacerItem(40, 30)
 
+    # create spacers on every row at column 8
     size = 10
     for row in range(size):
       container.layout().addItem(Qw.QSpacerItem(40, 30), row, 8)
+
+    # virtual midi passthrough button
+    self.vmp = Qw.QPushButton(clicked = self.passthrough)
+    self.vmp.setStyleSheet("QPushButton {background-color : #001e47}")
+    self.vmp.setToolTip('Virtual Midi Passthrough Mode: OFF')
+    container.layout().addWidget(self.vmp, 0, 9)
 
     # starts position at 104, ends at 19
     # the tens place descends, but the ones place ascends
@@ -107,24 +114,14 @@ class MainWindow(Qw.QWidget):
           pos = str(num+3) if (btn_row==0) else str(num)
 
           # right side column seperator
-          # if btn_column == 8: container.layout().addItem(spacer, btn_row, btn_column)
-          # if btn_column == 8: pass
-          if btn_column != 8:
-            # button 112 is out of bounds, pass over and continue
-            if pos == '112':
-              # pos = str(int(pos)-1)
-              self.buttons[pos] = Qw.QPushButton(clicked = self.passthrough)
-              self.buttons[pos].setStyleSheet("QPushButton {background-color : #001e47}")
-              self.buttons[pos].setToolTip('Virtual Midi Passthrough Mode: OFF')
-              container.layout().addWidget(self.buttons[pos], btn_row, btn_column)
-              column_cnt+=1
-            else:
-              # create button, add to widget, create action event for button
-              self.buttons[pos] = Qw.QPushButton(clicked=functools.partial(self.button_press, pos))
-              self.buttons[pos].setStyleSheet("QPushButton {background-color : #171717} QPushButton::pressed {background-color : #3c85cf}")
-              container.layout().addWidget(self.buttons[pos], btn_row, btn_column)
-              self.action_events[pos] = action_menu(self.buttons[pos], pos)
-              column_cnt+=1
+          # button 112 is out of bounds, pass over and continue
+          if btn_column != 8 and pos != '112':
+            # create button, add to widget, create action event for button
+            self.buttons[pos] = Qw.QPushButton(clicked=functools.partial(self.button_press, pos))
+            self.buttons[pos].setStyleSheet("QPushButton {background-color : #171717} QPushButton::pressed {background-color : #3c85cf}")
+            container.layout().addWidget(self.buttons[pos], btn_row, btn_column)
+            self.action_events[pos] = action_menu(self.buttons[pos], pos)
+            column_cnt+=1
 
     self.layout().addWidget(container, stretch=4)
 
@@ -144,8 +141,7 @@ class MainWindow(Qw.QWidget):
       self.hkparse = json.load(d)
 
       for key in self.buttons.keys():
-        if key != '112':
-          self.buttons[key].setToolTip(self.hkparse[key][1])
+        self.buttons[key].setToolTip(self.hkparse[key][1])
 
   # lets you use gui buttons without midi controller connected
   def button_press(self, text: str) -> None:
@@ -170,30 +166,22 @@ class MainWindow(Qw.QWidget):
     elif func == 'Reset Button': reset(pos)
     self.set_tooltip()
 
-  def disable_buttons(self) -> None:
-    for key in self.buttons.keys():
-      if key != '112':
-       self.buttons[key].setEnabled(False)
-       self.buttons[key].setStyleSheet("QPushButton {background-color : #0f0f0f}")
-  
-  def enable_buttons(self) -> None:
-    for key in self.buttons.keys():
-      if key != '112':
-       self.buttons[key].setEnabled(True)
-       self.buttons[key].setStyleSheet("QPushButton {background-color : #171717} QPushButton::pressed {background-color : #3c85cf}")
-
   def passthrough(self) -> None:
     if self.start_flag == False:
       if self.passthrough_flag:
-        self.enable_buttons()
+        for key in self.buttons.keys():
+          self.buttons[key].setEnabled(True)
+          self.buttons[key].setStyleSheet("QPushButton {background-color : #171717} QPushButton::pressed {background-color : #3c85cf}")
         self.passthrough_flag = False
-        self.buttons['112'].setStyleSheet("QPushButton {background-color : #001e47}")
-        self.buttons['112'].setToolTip('Virtual Midi Passthrough Mode: OFF')
+        self.vmp.setStyleSheet("QPushButton {background-color : #001e47}")
+        self.vmp.setToolTip('Virtual Midi Passthrough Mode: OFF')
       else:
-        self.disable_buttons()
+        for key in self.buttons.keys():
+          self.buttons[key].setEnabled(False)
+          self.buttons[key].setStyleSheet("QPushButton {background-color : #0f0f0f}")
         self.passthrough_flag = True
-        self.buttons['112'].setStyleSheet("QPushButton {background-color : #003580}")
-        self.buttons['112'].setToolTip('Virtual Midi Passthrough Mode: ON')
+        self.vmp.setStyleSheet("QPushButton {background-color : #003580}")
+        self.vmp.setToolTip('Virtual Midi Passthrough Mode: ON')
 
   def run(self) -> None:
     self.btn_start.setEnabled(False)
