@@ -18,7 +18,7 @@ usage:
 ```
 
 ### Support
-- Only Windows is officially supported (full Linux support comming soon)
+- Partial support for both Windows and Linux (full support comming soon for each)
 - Compatible midi controllers: Novation Launchpad (MK1, MK2)
 
 To reset all assigned keys, run:
